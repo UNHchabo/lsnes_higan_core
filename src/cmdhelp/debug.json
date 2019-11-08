@@ -1,0 +1,18 @@
+{
+	"__mod":"CDEBUG",
+	"show-callbacks":[
+		"scb", "Show debug callbacks",
+		{"":"Shows debugging callbacks"}
+	],
+	"generate-memory-event":[
+		"genevt", "Inject a debugging event",
+		{"<type> <addr> <value>":"Inject a debugging event with given <type>, <addr> and <value>"}
+	],
+	"tracelog":[
+		"tr", "Trace log control",
+		{
+			"<cpuid> <file>":"Start tracing <cpuid> to <file>",
+			"<cpuid>":"End tracing <cpuid>"
+		}
+	]
+}

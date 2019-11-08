@@ -1,0 +1,7 @@
+{
+	"__mod":"CFRAMEBUF",
+	"take-screenshot":[
+		"ss", "Takes a screenshot",
+		{"<file>":"Save a screenshot to PNG file <file>"}
+	]
+}

@@ -1,0 +1,19 @@
+{
+	"__mod":"CMACRO",
+	"macro":[
+		"t", "Toggle a macro",
+		{"<macroname>":"Toggle macro <macroname>."}
+	],
+	"+macro":[
+		"p", "Enable a macro",
+		{"<macroname>":"Enable macro <macroname>."}
+	],
+	"-macro":[
+		"r", "Disable a macro",
+		{"<macroname>":"Disable macro <macroname>."}
+	],
+	"test-macro":[
+		"test", "Test a macro (for debugging)",
+		{"<lcid> <macro>":"Show macro parse result for <macro> on controller <lcid>."}
+	]
+}

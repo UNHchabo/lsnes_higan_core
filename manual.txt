@@ -1,0 +1,1295 @@
+1 Introduction
+
+lsnes is SNES rerecording emulator based on bsnes core.
+
+2 Dependencies
+
+1. bsnes libsnes (for bsnes SNES core)
+
+  (a) v084-v087 (v084 or v085 for delayreset support)
+
+  (b) accuracy or compatiblity core with debugger enabled.
+
+  (c) Patched version (using included 7 patches)
+
+2. gambatte (for gambatte core)
+
+  (a) SVN r320, r358 or r364
+
+  (b) Patched with included patches
+
+3. Zlib
+
+4. boost_iostreams
+
+5. boost_filesystem
+
+6. boost_thread (if native std::thread is not available)
+
+7. libsdl (SDL only)
+
+8. sdlmain (SDL only, part of SDL)
+
+9. boost_conversion (this is header-only library)
+
+10. libswscale (wxwidgets graphics only)
+
+11. Portaudio (portaudio sound only)
+
+12. libao (libao sound only)
+
+13. Lua version 5.1.X or 5.2.X
+
+14. G++ 4.6 or 4.7
+
+15. libopus (optional, for commentary track tool)
+
+3 Building
+
+• Copy bsnes sources (the bsnes subdirectory) to subdirectory 
+  'bsnes' (for bsnes core).
+
+• Copy gambatte sources to subdirectory 'gambatte' (for gambatte 
+  core).
+
+• Patch the bsnes sources with included patches (directory 
+  'bsnes-patches/<version>', bsnes core)
+
+• Patch the gambatte sources with included patches (directory 
+  'gambatte-patches/<version>', gambatte core)
+
+• Edit options.build (or copy of that file)
+
+• Run make (passing 'OPTIONS=<filename>' if using something else 
+  than options.build).
+
+4 Command line options
+
+4.1 Wxwidgets options
+
+4.1.1 --rom=<file>
+
+Load <file> as ROM.
+
+4.1.2 <file>
+
+Load <file> as ROM.
+
+4.1.3 --load=<file>
+
+Load <file> as movie or savestate file on startup.
+
+4.1.4 --settings
+
+Instead of starting the emulator, only display the settings.
+
+4.1.5 --pluginmanager
+
+Instead of starting the emulator, display the plugin manager 
+(useful to disable some plugin that causes emulator to crash on 
+startup)
+
+4.1.6 --lua=<file>
+
+Run this Lua file on startup
+
+4.2 dump options (lsnes-dumpavi only)
+
+4.2.1 --rom=<file>
+
+Load <file> as ROM. Required.
+
+4.2.2 <filename>
+
+Load <filename> as movie or savestate file on startup. Required.
+
+4.2.3 --dumper=<dumper>
+
+Set the dumper to use (required). Use 'list' for listing of known 
+dumpers.
+
+4.2.4 --firmware-path=<path>
+
+Set path to look for firmware.
+
+4.2.5 --mode=<mode>
+
+Set the mode to use (required for dumpers with multiple modes, 
+forbidden otherwise). Use 'list' for known modes.
+
+4.2.6 --prefix=<prefix>
+
+Set dump prefix. Default is “avidump”.
+
+4.2.7 --option=<name>=<value>
+
+Set option <name> to value <value>.
+
+4.2.8 --length=<length>
+
+Set number of frames to dump. Mandatory, unless --overdump-length 
+is specified.
+
+4.2.9 --overdump-length=<length>
+
+Set number of frames to dump after movie end. Mutually exclusive 
+with --length.
+
+4.2.10 --lua=<script>
+
+Run specified lua script (lsnes-dumpavi does not have 
+initialization files).
+
+4.2.11 --load-library=<library>
+
+Load the specified shared object / dynamic library / dynamic link 
+library.
+
+4.3 lsnes settings directory
+
+The lsnes settings directory is (in order of decreasing 
+perference):
+
+• Windows: %APPDATA%\lsnes (if %APPDATA% exists)
+
+• Unix: $XDG_CONFIG_HOME/lsnes (if $XDG_CONFIG_HOME exists)
+
+• Unix: $HOME/.config/lsnes (if $HOME exists)
+
+• All: . (fallback default).
+
+If leading directories do not exist, attempt to create them is 
+made.
+
+5 Internal commands
+
+• Commands beginning with '*' invoke the corresponding command 
+  without alias expansion.
+
+• If command starts with '+' (after possible '*'), the command is 
+  executed as-is when button is pressed, and when button is 
+  released, it is executed with '+' replaced by '-'.
+
+• Commands without '+' execute only on negative edge (release).
+
+5.1 run-script <script>
+
+Run <script> as if commands were entered on the command line.
+
+5.2 Memory manipulation
+
+• <address> can be one of:
+
+  – Decimal number
+
+  – Hexadecimal number (prefixed with 0x)
+
+  – <memarea>+<hexoffset> (no 0x prefix for offset).
+
+<value> can be hexadecimal (prefixed with '0x'), unsigned or 
+signed (prefixed with '-') decimal.
+
+The available element <sizes> are:
+
+• byte: 1 byte
+
+• word: 2 bytes
+
+• hword: 3 bytes
+
+• dword: 4 bytes
+
+• qword: 8 bytes
+
+• float: 4 bytes (floating-point)
+
+• double: 8 bytes (floating-point)
+
+When reading RAM and ROM, multi-byte reads/writes are big-endian. 
+When dealing with DSP memory, multi-byte reads/writes are 
+native-endian (do not use operand sizes exceeding DSP bitness, 
+except dword is OK for 24-bit memory).
+
+5.2.1 read-<size> <address>
+
+Read the value of byte in <address>.
+
+5.2.2 read-s<size> <address>
+
+Read the value of signed byte in <address>.
+
+5.2.3 write-<size> <address> <value>
+
+Write <value> to byte in address <address>.
+
+5.3 Main commands
+
+These commands are not available in lsnesrc, but are available 
+after ROM has been loaded.
+
+5.3.1 quit-emulator
+
+Quits the emulator.
+
+5.3.2 pause-emulator
+
+Toggle paused/unpaused
+
+5.3.3 +advance-frame 
+
+Advance frame. If the button is still held after configurable 
+timeout expires, game unpauses for the duration frame advance is 
+held.
+
+5.3.4 +advance-poll 
+
+Advance subframe. If the button is still held after configurable 
+timeout expires, game unpauses for the duration frame advance is 
+held.
+
+5.3.5 advance-skiplag 
+
+Skip to first poll in frame after current.
+
+5.3.6 reset 
+
+Reset the SNES after this frame.
+
+5.3.7 load <filename> 
+
+Load savestate <filename> in current mode.
+
+5.3.8 load-state <filename> 
+
+Load savestate <filename> in readwrite mode.
+
+5.3.9 load-readonly <filename> 
+
+Load savestate <filename> in readonly mode.
+
+5.3.10 load-preserve <filename> 
+
+Load savestate <filename> in readonly mode, preserving current 
+events.
+
+5.3.11 load-movie <filename> 
+
+Load savestate <filename>, ignoring save part in readonly mode.
+
+5.3.12 save-state <filename> 
+
+Save system state to <filename> as soon as possible.
+
+5.3.13 save-movie <filename> 
+
+Save movie to <filename>.
+
+5.3.14 set-rwmode 
+
+Set recording mode.
+
+5.3.15 set-romode 
+
+Set playback mode
+
+5.3.16 toggle-rwmode 
+
+Toggle between playback and recording modes.
+
+5.3.17 test-1, test-2, test-3
+
+Internal test commands. Don't use.
+
+5.3.18 take-screenshot <filename> 
+
+Save screenshot to <filename>.
+
+5.3.19 +controller <class>-<#>-<button>
+
+Press button <button> on controller <num> of class <class>.
+
+• Class 'gamepad': A, B, X, Y, L, R, select, start, up, down, 
+  left, right, ext0, ext1, ext2, ext3
+
+• Class 'mouse': L, R
+
+• Class 'superscope': trigger, cursor, turbo, pause
+
+• Class 'justifier': trigger, start
+
+• Class 'gb': A, B, select, start, up, down, left, right
+
+5.3.20 hold-controller <class>-<#>-<button>
+
+Hold/unhold button <button> on controller <num> of class <class>.
+
+5.3.21 type-controller <class>-<#>-<button>
+
+Hold/unhold button <button> on controller <num> of class <class> 
+for the next frame. See +controller for button names.
+
+Cauntion: Does not work properly if outside frame advance.
+
+5.3.22 +autofire-controller <class>-<#>-<button> [[<duty>] 
+  <cyclelen>]
+
+Start autofire. If duty is not specified, defaults to 1. If 
+<cyclelen> is not specified, defaults to 2.
+
+5.3.23 -autofire-controller <class>-<#>-<button> [[<duty>] 
+  <cyclelen>]
+
+End autofire.
+
+5.3.24 autofire-controller <class>-<#>-<button> [[<duty>] 
+  <cyclelen>]
+
+Toggle autofire. If autofire is turned on, specified cycle is 
+used.
+
+5.3.25 designate-position <class>-<#>-analog<n>
+
+Designate position for analog pair. <n> is only there if there 
+are multiple axis pairs.
+
+5.3.26 repaint
+
+Force a repaint.
+
+5.3.27 toggle-pause-on-end
+
+Toggle pause on end flag.
+
+5.3.28 set-pause-on-end
+
+Set pause on end flag.
+
+5.3.29 clear-pause-on-end
+
+Clear pause on end flag.
+
+5.3.30 action <action> [<parameters>]
+
+Run specified core action.
+
+5.4 Save jukebox 
+
+5.4.1 cycle-jukebox-backward
+
+Cycle save jukebox backwards.
+
+5.4.2 cycle-jukebox-forward
+
+Cycle save jukebox forwards
+
+5.4.3 set-jukebox-slot <slot>
+
+Set current jukebox slot
+
+5.4.4 load-jukebox
+
+Do load from jukebox (current mode).
+
+5.4.5 save-jukebox
+
+Do state save to jukebox.
+
+5.5 Slot branches
+
+5.5.1 list-branches
+
+List all branches
+
+5.5.2 create-branch <pid> <name>
+
+Create a new branch, with <pid> as parent and <name> as name.
+
+5.5.3 rename-branch <id> <name>
+
+Rename branch <id> to <name>.
+
+5.5.4 reparent-branch <id> <pid>
+
+Set parent of branch <id> to <pid>.
+
+5.5.5 set-branch <id>
+
+Set current branch to <id>.
+
+5.5.6 delete-branch <id>
+
+Delete branch <id>.
+
+
+
+5.6 Lua 
+
+5.6.1 evaluate-lua <luacode>
+
+Run Lua code <luacode> using built-in Lua interpretter.
+
+5.6.2 L <luacode>
+
+Synonym for evaluate-lua.
+
+5.6.3 run-lua <script>
+
+Run specified lua file using built-in Lua interpretter.
+
+5.6.4 reset-lua
+
+Clear the Lua VM state and restore to factory defaults.
+
+5.7 Sound 
+
+5.7.1 enable-sound <on/off> 
+
+Enable/Disable sound.
+
+5.8 Misc.
+
+5.8.1 load-rom <file>
+
+Loads ROM (format autodetected) from <file>.
+
+5.8.2 reload-rom
+
+Reloads the main ROM image from.
+
+5.8.3 +tangent
+
+Tangent for recording voice for commentary track. While pressed, 
+record a stream.
+
+5.8.4 advance-subframe-timeout
+
+Subframe advance timeout in milliseconds. Default is 100.
+
+5.8.5 set-speed <speed>
+
+Set the speed multiplier. <speed> may be positive number (1 is 
+normal speed) or “turbo” for turbo.
+
+6 Settings
+
+6.1 Core settings
+
+6.2 AVI dumper settings
+
+6.2.1 avi-large
+
+AVI dumper: Always dump at 512x448 or 512x478 regardless of what 
+the console outputs.
+
+6.2.2 avi-left-border
+
+AVI dumper: Set the default left border thickness (unless lua 
+overrides) for dumps. Range 0-8191. Default is 0.
+
+6.2.3 avi-right-border
+
+AVI dumper: Set the default right border thickness (unless lua 
+overrides) for dumps. Range 0-8191. Default is 0.
+
+6.2.4 avi-top-border
+
+AVI dumper: Set the default top border thickness (unless lua 
+overrides) for dumps. Range 0-8191. Default is 0.
+
+6.2.5 avi-bottom-border
+
+AVI dumper: Set the default bottom border thickness (unless lua 
+overrides) for dumps. Range 0-8191. Default is 0.
+
+6.2.6 avi-maxframes
+
+AVI dumper: Maximum number of frames per dump segment (0 => 
+unlimited). Range 0-999999999. Default is 0.
+
+6.2.7 avi-compresison
+
+AVI dumper: Compression level (0-18).
+
+• Compression levels 10 and above are not compatible with stock 
+  CSCD codec.
+
+• Recomended level is 7.
+
+6.2.8 avi-soundrate
+
+AVI dumper: Set method of determining the sound rate.
+
+• 0: Pick nearest of 8, 11.025, 12, 16, 22.05, 24, 32, 44.1, 48, 
+  64, 88.2, 96, 128, 176.4 and 192 kHz.
+
+• 1: Round down to nearest integer.
+
+• 2: Round up to nearest ingeter.
+
+• 3: Multiply by denominator.
+
+• 4: High quality 44.1kHz (SRC needed).
+
+• 5: High quality 48kHz (SRC needed).
+
+6.3 JMD options
+
+6.3.1 jmd-compression
+
+JMD dumper: Compression level (0-9).
+
+7 Movie editor
+
+• The editor edits in-memory movie.
+
+• Because past can't be edited and readwrite mode doesn't allow 
+  future, editing only works in read only mode.
+
+• Keyboard triggers the normal hotkeys and bindings.
+
+7.1 Left button actions
+
+• Clicking on cell in future (indicated by lack of redish 
+  background) toggles it (if it is a button) or prompts for a 
+  value (if it is an axis)
+
+• Dragging vertically toggles sequence of buttons or changes a 
+  sequence of axis values.
+
+7.2 Right button actions
+
+The right mouse button pops up a context-sensitive menu:
+
+• Toggle <something>: Toggle this button
+
+• Change <something>: Change this axis value
+
+• Insert frame after: Insert a frame after this frame
+
+• Append frame: Append a frame to movie
+
+• Append frames: Append specified number of frames to movie
+
+• Delete frame: Delete this frame
+
+• Delete subframe: Delete this subframe
+
+• Truncate movie: Delete this subframe and everything after it.
+
+• Scroll to frame: Prompt for a frame and scroll the display to 
+  that frame.
+
+• Scroll to current frame: Scroll the display to current position
+
+• Run to frame: Prompts for frame and runs the emulation to that 
+  frame.
+
+• Change number of lines visible: Change the height of the movie 
+  display (1 to 255).
+
+• Lock scroll to playback: While playing back or rewinding 
+  movies, the display will follow if enabled.
+
+8 Memory watch expression syntax
+
+Memory watch expressions has the following syntax elements:
+
+${foo}     The value of memory watch foo.
+
+0x1234     Hexadecimal number 1234
+
+12345      Decimal number 12345
+
+3.141      Decimal number 3.141
+
+-a         Unary negation
+
+~a         Bitwise NOT (integers only)
+
+a*b        Multiplication
+
+a/b        Division/quotent
+
+a%b        Remainder (integers only)
+
+a+b        Sum or string concatenation
+
+a-b        Difference
+
+a<<b       Shift left (integers only)
+
+a>>b       Shift right (integers only). Arithmetic for signed.
+
+a<b        Less than
+
+a<=b       Less or equal to
+
+a==b       Equal to
+
+a!=b       Not equal to
+
+a>=b       Greater or equal to
+
+a>b        Greater than
+
+a&b        Bitwise AND (integers only)
+
+a^b        Bitwise XOR (integers only)
+
+a|b        Bitwise OR (integers only)
+
+a&&b       Logical AND
+
+a||b       Logical OR
+
+π          Numeric constant pi.
+
+i          Imaginary unit
+
+if(x,y)    If x is true, y, else false.
+
+if(x,y,z)  If x is true, y, else z.
+
+select(x...)
+
+           First value in x... that is not false, or false if 
+none.
+
+unsigned(x)
+
+           Cast x to unsigned.
+
+signed(x)
+
+           Cast x to signed.
+
+float(x)
+
+           Cast x to float.
+
+min(x...)  The smallest value among x... or false if empty.
+
+max(x...)  The largest value among x... or false if empty.
+
+sum(x...)  Sum/concatenation of x... or false if empty.
+
+prod(x...) Product of x... or false if empty.
+
+sqrt(x)    Square root of x.
+
+log(x)     Natural log of x.
+
+log(x,y)   Log of y to base x.
+
+exp(x)     e^x.
+
+exp(x,y)   x^y
+
+sin(x)     Sine of x
+
+cos(x)     Cosine of x
+
+tan(x)     Tangent of x
+
+asin(x)    Arcsine of x
+
+acos(x)    Arccosine of x
+
+atan(x)    Arctangent of x
+
+atan(x,y)  Angle between vector (x,y) and x-axis.
+
+sinh(x)    Hyperbolic sine of x
+
+cosh(x)    Hyperbolic cosine of x
+
+tanh(x)    Hyperbolic tangent of x
+
+arsinh(x)  Hyperbolic arsine of x
+
+arcosh(x)  Hyperbolic arcosine of x
+
+artanh(x)  Hyperbolic artangent of x
+
+torad(x)   Convert x degrees to radians.
+
+todeg(x)   Convert x radians to degrees.
+
+re(x)      Real part of complex number x.
+
+im(x)      Imaginary part of complex number x.
+
+conj(x)    Complex conjugate of x.
+
+abs(x)     Absolute value of x.
+
+arg(x)     Argument of x.
+
+pyth(x...) sqrt(sum(x^2)). I.e. pythagorean distance.
+
+e          Base of natural logarithm
+
+pi         Pi
+
+true       Constant true
+
+false      Constant false
+
+
+
+9 Modifier and key names:
+
+9.1 wxWidgets platform
+
+9.1.1 Modifier names:
+
+Following modifier names are known:
+
+• alt
+
+• ctrl
+
+• shift 
+
+• meta
+
+• cmd (Mac OS X only)
+
+9.1.2 Key names:
+
+Following key names are known:
+
+• back, tab, return, escape, space, exclaim, quotedbl, hash, 
+  dollar, percent, ampersand, quote, leftparen, rightparen, 
+  asterisk, plus, comma, minus, period, slash, 0, 1, 2, 3, 4, 5, 
+  6, 7, 8, 9, colon, semicolon, less, equals, greater, question, 
+  at, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, 
+  u, v, w, x, y, z, leftbracket, backslash, rightbracket, caret, 
+  underscore, backquote, a, b, c, d, e, f, g, h, i, j, k, l, m, 
+  n, o, p, q, r, s, t, u, v, w, x, y, z, leftcurly, pipe, 
+  rightcurly, tilde, delete, start, lbutton, rbutton, cancel, 
+  mbutton, clear, shift, alt, control, menu, pause, capital, end, 
+  home, lefT, up, right, down, select, print, execute, snapshot, 
+  insert, help, numpad0, numpad1, numpad2, numpad3, numpad4, 
+  numpad5, numpad6, numpad7, numpad8, numpad9, multiply, add, 
+  separator, subtract, decimal, divide, f1, f2, f3, f4, f5, f6, 
+  f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, 
+  f20, f21, f22, f23, f24, numlock, scroll, pageup, pagedown, 
+  numpad_space, numpad_tab, numpad_enter, numpad_f1, numpad_f2, 
+  numpad_f3, numpad_f4, numpad_home, numpad_left, numpad_up, 
+  numpad_right, numpad_down, numpad_pageup, numpad_pagedown, 
+  numpad_end, numpad_begin, numpad_insert, numpad_delete, 
+  numpad_equal, numpad_multiply, numpad_add, numpad_separator, 
+  numpad_subtract, numpad_decimal, numpad_divide, windows_left, 
+  windows_right, windows_menu, command, special1, special2, 
+  special3, special4, special5, special6, special7, special8, 
+  special9, special10, special11, special12, special13, 
+  special14, special15, special16, special17, special18, 
+  special19, special20
+
+10 Movie file format
+
+Movie file is .zip archive in itself, normal ZIP archive tools 
+work on it (note: If you recompress it, do not use compression 
+methods other than store and deflate and especially do not use 
+encryption of any kind).
+
+10.1 Detecting clean start/SRAM/Savestate
+
+• If file has member “savestate” it is savestate, otherwise:
+
+• If file has members with names starting “moviesram.” it is 
+  movie starting from SRAM, otherwise:
+
+• It is movie starting from clear state.
+
+10.2 Member: gametype
+
+Type of game ROM and region (as one line). Valid values are:
+
+
++--------------+---------------------+--------+
+|    Value     |       System        | Region |
++--------------+---------------------+--------+
++--------------+---------------------+--------+
+|  snes_pal    |     Super NES       |  PAL   |
++--------------+---------------------+--------+
+|   sgb_pal    |   Super Game Boy    |  PAL   |
++--------------+---------------------+--------+
+|  snes_ntsc   |     Super NES       |  NTSC  |
++--------------+---------------------+--------+
+|  sgb_ntsc    |   Super Game Boy    |  NTSC  |
++--------------+---------------------+--------+
+|     bsx      | BS-X (non-slotted)  |  NTSC  |
++--------------+---------------------+--------+
+| bsxslotted   |   BS-X (slotted)    |  NTSC  |
++--------------+---------------------+--------+
+| sufamiturbo  |    Sufami Turbo     |  NTSC  |
++--------------+---------------------+--------+
+
+
+Frame rates are:
+
+
++---------+-----------------+
+| Region  | Framerate (fps) |
++---------+-----------------+
++---------+-----------------+
+|  PAL    |   322445/6448   |
++---------+-----------------+
+|  NTSC   | 10738636/178683 |
++---------+-----------------+
+
+
+10.3 Member: port1
+
+Contains type of port #1 (as one line). Valid values are 'none', 
+'gamepad', 'multitap' and 'mouse'. If not present, defaults to 
+'gamepad'.
+
+10.4 Member: port2
+
+Contains type of port #2 (as one line). Valid values are 'none', 
+'gamepad', 'multitap', 'mouse', 'superscope', 'justifier' and 
+'justifiers'. If not present, defaults to 'none'.
+
+10.5 Member: gamename
+
+Contains name of the game (as one line).
+
+10.6 Member: authors
+
+Contains authors, one per line. Part before '|' is the full name, 
+part after is the nickname.
+
+10.7 Member: systemid
+
+Always “lsnes-rr1” (one line). Used to reject other saves.
+
+10.8 Member: controlsversion
+
+Always “0” (one line). Used to identify what controls are there.
+
+10.9 Member: “coreversion”
+
+Contains bsnes core version number (as one line).
+
+10.10 Member: projectid
+
+Contains project ID (as one line). Used to identify if two movies 
+are part of the same project.
+
+10.11 Member: {rom,slota,slotb}{,xml}.sha256
+
+Contains SHA-256 of said ROM or ROM mapping file (as one line). 
+Absent if corresponding file is absent.
+
+10.12 Member: moviesram.<name>
+
+Raw binary startup SRAM of kind <name>. Only present in 
+savestates and movies starting from SRAM.
+
+10.13 Member: saveframe
+
+Contains frame number (as one line) of frame movie was saved on. 
+Only present in savestates.
+
+10.14 Member: lagcounter
+
+Current value of lag counter (as one line). Only present in 
+savestates.
+
+10.15 Member: pollcounters
+
+Contains poll counters (currently 100 of them), one per line. 
+Each line is raw poll count if DRDY is set for it. Otherwise it 
+is negative poll count minus one. Only present in savestates.
+
+10.16 Member: hostmemory
+
+Raw binary dump of host memory. Only present in savestates.
+
+10.17 Member: savestate
+
+The raw binary savestate itself. Savestate detection uses this 
+file, only present in savestates.
+
+10.18 Member: screenshot
+
+Screenshot of current frame. Only present in savestates. First 2 
+bytes are big-endian width of image, rest are 24-bit RGB image 
+data. Height of image is inferred from the width and size of 
+data.
+
+10.19 Member: sram.<name>
+
+Raw binary SRAM of kind <name> at time of savestate. Only present 
+in savestates.
+
+10.20 Member: input
+
+The actual input track, one line per subframe (blank lines are 
+skipped).
+
+• If the first byte of each line is '.', ' ', <tab> or '|', then 
+  the line is part of same frame as previous, otherwise it starts 
+  a new frame.
+
+• First subframe must start a new frame.
+
+Length of movie in frames is number of lines in input file that 
+start a new frame.
+
+10.21 Member: subtitles
+
+Subtitle track. Optional.
+
+• Each line is in form <firstframe> <numframes> <text>.
+
+• Linefeed is encoded as \n, backslash is encoded as \\.
+
+10.22 Member: rerecords
+
+Contains textual base-10 rerecord count (as one line; emulator 
+just writes this, it doesn't read it) + 1.
+
+10.23 Member: rrdata
+
+This member stores set of load IDs. There is one load ID per 
+rerecord (plus one corresponding to start of project).
+
+• This member constists of concatenation of records
+
+• Each record is 2-36 bytes long and can represent 1-16,843,009 
+  consequtive IDs.
+
+• IDs are interpretted as 256-bit big-endian integers with 
+  warparound.
+
+• Initial predicted ID is all zeroes.
+
+Format of each record is:
+
+• 1 byte: Opcode byte. Bits 0-4 are prefix length (prefixlen), 
+  bits 5-6 are count length (countlen). Bit 7 is unused.
+
+• 32-prefixlen bytes of ID.
+
+• countlen bytes of big-endian count (count).
+
+Records are processed as follows:
+
+• To form the first ID encoded by record, take the first 
+  prefixlen bytes predicted ID and append the read ID value to 
+  it. The result is the first ID encoded.
+
+• If countlen is 0, record encodes 1 ID.
+
+• If countlen is 1, record encodes 2+count IDs.
+
+• If countlen is 2, record encodes 258+count IDs.
+
+• If countlen is 3, record encodes 65794+count IDs.
+
+• The new predicted ID is the next ID after last one encoded by 
+  the record.
+
+The number of rerecords + 1 is equal to the sum of number of IDs 
+encoded by all records.
+
+10.24 Member: starttime.second
+
+Movie starting time, second part. Epoch is Unix epoch. Default is 
+1,000,000,000.
+
+10.25 Member: starttime.subsecond
+
+Movie starting time, subsecond part. Unit is CPU clocks. Default 
+is 0.
+
+10.26 Member: savetime.second
+
+Movie saving time, second part. Default is starttime.second. Only 
+present in savestates.
+
+10.27 Member: savetime.subsecond
+
+Movie saving time, subsecond part. Default is 
+starttime.subsecond. Only present in savestates.
+
+11 lsvs file format (commentary tracks)
+
+11.1 Clusters
+
+• Each cluster is 8kB (8192 bytes) in size.
+
+• Cluster n starts at offset 8192*n in file.
+
+• The following clusters are system special:
+
+  – Cluster 0 and all clusters with number multiple of 2048 
+    (cluster tables)
+
+  – Cluster 1 (superblock)
+
+11.2 Cluster tables
+
+• The cluster table describing cluster n is stored in cluster n & 
+  ~0x7FF (zero last 11 bits of n).
+
+• This cluster table consists of 2048 4-byte big-endian integers.
+
+• Each entry describes a cluster in 16MB supercluster, in order.
+
+• The valid values for entries are:
+
+  – 0x00000000: Free cluster
+
+  – 0x00000001: Last cluster in chain.
+
+  – 0xFFFFFFFF: System cluster (cluster tables and superblock)
+
+  – (anything else): Number of next cluster in chain. Must not be 
+    multiple of 2048.
+
+• Due to limitations of the format, there can be at most 2097052 
+  superclusters, giving maximum file size of 16TB.
+
+11.3 Stream table
+
+• The stream table chain always starts in cluster 2.
+
+• Otherwise, it follows normal chaining.
+
+• The stream table consists of 16-byte entries:
+
+  – The first 8 bytes of entry give big-endian beginning position 
+    of stream in units of 1/48000 s.
+
+  – The next 4 bytes of entry give big-endian beginning cluster 
+    for control data. 0 here marks the entry as not present.
+
+  – The last 4 bytes of entry give big-endian beginning cluster 
+    for codec data.
+
+• Stream table clusters are normal clusters, following normal 
+  chaining.
+
+• The stream begnning position is not guarenteed unique. There 
+  can be multiple streams with the same starting position in the 
+  file.
+
+11.4 Stream control data
+
+• The stream control data consists of entries 4 bytes each:
+
+  – The first 2 bytes of entry gives big-endian length of packet
+
+  – The next byte of entry gives audio length of packet in units 
+    of 1/400 s.
+
+  – The last byte is control byte.
+
+    ∗ 0 means this entry is not present and the control data 
+      ends.
+
+    ∗ 1 is valid control entry.
+
+• The stream control data can also end by running into end of the 
+  readable chain.
+
+  – This happens if there happens to be exact multiple of 2048 
+    packets in stream and number of packets is nonzero.
+
+• These clusters follow normal chaining.
+
+11.5 Stream codec data
+
+• Stream codec data consists of raw Opus data packets packed back 
+  to back with nothing in between.
+
+• Warning: Due to internal limitations, this data must reside in 
+  the first 65536 superclusters (that is, the first 1TB of the 
+  file).
+
+11.6 Superblock
+
+• The superblock is stored in cluster 1. 
+
+• The first 11 bytes are “sefs-magic”<NUL>.
+
+• The rest are unused.
+
+• This cluster 1 is marked as system special.
+
+12 Known ROM extensions
+
+• SNES cartridge ROMs: sfc, smc, swc, fig, ufo, sf2, gd3, gd7, 
+  dx2, mgd, mgh.
+
+• DMG cartridge ROMs: dmg, gb.
+
+• GBC cartridge ROMs: cgb, gbc.
+
+13 Gamepack files
+
+• The first line must be: “[GAMEPACK FILE]”.
+
+• There is one needed line: “type <systype>”. This sets system 
+  type to <systype>. The following system types are valid:
+
+  – snes (SNES)
+
+  – bsx (BS-X non-slotted)
+
+  – bsxslotted (BS-X slotted)
+
+  – sufamiturbo (Sufami Turbo)
+
+  – sgb (Super Game Boy)
+
+  – dmg (Game Boy)
+
+  – gbc (Game Boy Color)
+
+  – gbc_gba (Game Boy Color with GBA initial register values)
+
+• Optionally a region can be specified: “region <region>”. The 
+  following values are valid:
+
+  – autodetect (Autodetect region: snes and sgb only)
+
+  – ntsc (NTSC: snes, bsx, bsxslotted, sufamiturbo, sgb)
+
+  – pal (PAL: snes, sgb)
+
+  – world (World: dmg, gbc, gbc_gba)
+
+• ROM images are loaded as: “rom <type> <file>”. The following 
+  types are valid:
+
+  – rom (Cartridge ROM in snes, dmg, gbc, gbc_gba. BIOS in bsx, 
+    bsxslotted, sufamiturbo)
+
+  – bsx (Cartridge ROM in bsx, bsxslotted)
+
+  – slot-a (Cartridge ROM in sufamiturbo)
+
+  – slot-b (Cartridge ROM in sufamiturbo)
+
+• ROM markup can be loaded as: “xml <type> <file>”. The types 
+  valid are the same as for ROMs.
+
+• Patches can be loaded as “patch[<offset>] <type> <file>”. The 
+  types are the same as for ROMs.
+
+  – Offset is given in form [+-]<number>. Usually offset is 
+    either +0 or -512.
+
+  – Default offset is +0.
+
+13.1 Example:
+
+[GAMEPACK FILE]
+
+type snes
+
+rom rom speedygonzales.sfc
+
+patch-512 rom sonicthehedgehog.ips
+
+13.2 Example 2:
+
+[GAMEPACK FILE]
+
+type sgb
+
+rom rom supergameboy.sfc
+
+rom dmg megamanV.dmg
+
+14 Quick'n'dirty encode guide
+
+1. Start the emulator and load the ROM and movie file.
+
+2. Set large AVI option 'set-setting avi-large on'
+
+3. Enable dumping 'dump-avi tmpdump' 
+
+4. Unpause and let it run until you want to end dumping.
+
+5. Close the emulator (closing the window is the easiest way). Or 
+  use 'end-avi'.
+
+6. For each tmpdump*.avi file created, on command prompt, do 
+  'x264 --crf 10 -o tmpdump_<numbers>.mkv tmpdump_<numbers>.avi'.
+
+7. Do 'sox tmpdump.sox tmpdump.ogg rate -v 32000'
+
+8. Do 'mkvmerge -o tmpdump_video.mkv tmpdump_0000000.mkv + 
+  tmpdump_0000001.mkv + tmpdump_0000002.mkv' (list every 
+  tmpdump_<numbers>.mkv, with + in between).
+
+9. Do 'mkvmerge -o final.mkv tmpdump_video.mkv tmpdump.ogg'. Now 
+  final.mkv contains quick'n'dirty encode.
+
+15 Axis configurations for some gamepad types:
+
+15.1 XBox360 controller:
+
+Axes 2 and 5 (joystick<n>axis2 and joystick<n>axis5) should be 
+set to pressure-+.
+
+set-axis joystick0axis2 pressure-+
+
+set-axis joystick0axis5 pressure-+
+
+• This is needed for SDL only. EVDEV sets those types correctly.
+
+15.2 PS3 “sixaxis” controller:
+
+Axes 8-19 should be disabled.
+
+set-axis joystick0axis8 disabled
+
+set-axis joystick0axis9 disabled
+
+set-axis joystick0axis10 disabled
+
+set-axis joystick0axis11 disabled
+
+set-axis joystick0axis12 disabled
+
+set-axis joystick0axis13 disabled
+
+set-axis joystick0axis14 disabled
+
+set-axis joystick0axis15 disabled
+
+set-axis joystick0axis16 disabled
+
+set-axis joystick0axis17 disabled
+
+set-axis joystick0axis18 disabled
+
+set-axis joystick0axis19 disabled
+
+16 Errata:
+
+16.1 Problems from BSNES core:
+
+• The whole pending save stuff.
+
+• It is slow (especially accuracy).
+
+• Firmwares can't be loaded from ZIP archives.
+
+16.2 Other problems:
+
+• Modifiers don't work with pseudo-keys.
+
+• Audio for last dumped frame is not itself dumped.
+
+• Audio in UI is pretty bad in quality if game doesn't run at 
+  full speed.
+

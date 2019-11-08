@@ -1,0 +1,2930 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language finnish
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Hakusana
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+lsnes is SNES rerecording emulator based on bsnes core.
+\end_layout
+
+\begin_layout Section
+Dependencies
+\end_layout
+
+\begin_layout Enumerate
+bsnes libsnes (for bsnes SNES core)
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+v084-v087 (v084 or v085 for delayreset support)
+\end_layout
+
+\begin_layout Enumerate
+accuracy or compatiblity core with debugger enabled.
+\end_layout
+
+\begin_layout Enumerate
+Patched version (using included 7 patches)
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+gambatte (for gambatte core)
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+SVN r320, r358 or r364
+\end_layout
+
+\begin_layout Enumerate
+Patched with included patches
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Zlib
+\end_layout
+
+\begin_layout Enumerate
+boost_iostreams
+\end_layout
+
+\begin_layout Enumerate
+boost_filesystem
+\end_layout
+
+\begin_layout Enumerate
+boost_thread (if native std::thread is not available)
+\end_layout
+
+\begin_layout Enumerate
+libsdl (SDL only)
+\end_layout
+
+\begin_layout Enumerate
+sdlmain (SDL only, part of SDL)
+\end_layout
+
+\begin_layout Enumerate
+boost_conversion (this is header-only library)
+\end_layout
+
+\begin_layout Enumerate
+libswscale (wxwidgets graphics only)
+\end_layout
+
+\begin_layout Enumerate
+Portaudio (portaudio sound only)
+\end_layout
+
+\begin_layout Enumerate
+libao (libao sound only)
+\end_layout
+
+\begin_layout Enumerate
+Lua version 5.1.X or 5.2.X
+\end_layout
+
+\begin_layout Enumerate
+G++ 4.6 or 4.7
+\end_layout
+
+\begin_layout Enumerate
+libopus (optional, for commentary track tool)
+\end_layout
+
+\begin_layout Section
+Building
+\end_layout
+
+\begin_layout Itemize
+Copy bsnes sources (the bsnes subdirectory) to subdirectory 'bsnes' (for
+ bsnes core).
+\end_layout
+
+\begin_layout Itemize
+Copy gambatte sources to subdirectory 'gambatte' (for gambatte core).
+\end_layout
+
+\begin_layout Itemize
+Patch the bsnes sources with included patches (directory 'bsnes-patches/<version
+>', bsnes core)
+\end_layout
+
+\begin_layout Itemize
+Patch the gambatte sources with included patches (directory 'gambatte-patches/<v
+ersion>', gambatte core)
+\end_layout
+
+\begin_layout Itemize
+Edit options.build (or copy of that file)
+\end_layout
+
+\begin_layout Itemize
+Run make (passing 'OPTIONS=<filename>' if using something else than options.build
+).
+\end_layout
+
+\begin_layout Section
+Command line options
+\end_layout
+
+\begin_layout Subsection
+Wxwidgets options
+\end_layout
+
+\begin_layout Subsubsection
+--rom=<file>
+\end_layout
+
+\begin_layout Standard
+Load <file> as ROM.
+\end_layout
+
+\begin_layout Subsubsection
+<file>
+\end_layout
+
+\begin_layout Standard
+Load <file> as ROM.
+\end_layout
+
+\begin_layout Subsubsection
+--load=<file>
+\end_layout
+
+\begin_layout Standard
+Load <file> as movie or savestate file on startup.
+\end_layout
+
+\begin_layout Subsubsection
+--settings
+\end_layout
+
+\begin_layout Standard
+Instead of starting the emulator, only display the settings.
+\end_layout
+
+\begin_layout Subsubsection
+--pluginmanager
+\end_layout
+
+\begin_layout Standard
+Instead of starting the emulator, display the plugin manager (useful to
+ disable some plugin that causes emulator to crash on startup)
+\end_layout
+
+\begin_layout Subsubsection
+--lua=<file>
+\end_layout
+
+\begin_layout Standard
+Run this Lua file on startup
+\end_layout
+
+\begin_layout Subsection
+dump options (lsnes-dumpavi only)
+\end_layout
+
+\begin_layout Subsubsection
+--rom=<file>
+\end_layout
+
+\begin_layout Standard
+Load <file> as ROM.
+ Required.
+\end_layout
+
+\begin_layout Subsubsection
+<filename>
+\end_layout
+
+\begin_layout Standard
+Load <filename> as movie or savestate file on startup.
+ Required.
+\end_layout
+
+\begin_layout Subsubsection
+--dumper=<dumper>
+\end_layout
+
+\begin_layout Standard
+Set the dumper to use (required).
+ Use 'list' for listing of known dumpers.
+\end_layout
+
+\begin_layout Subsubsection
+--firmware-path=<path>
+\end_layout
+
+\begin_layout Standard
+Set path to look for firmware.
+\end_layout
+
+\begin_layout Subsubsection
+--mode=<mode>
+\end_layout
+
+\begin_layout Standard
+Set the mode to use (required for dumpers with multiple modes, forbidden
+ otherwise).
+ Use 'list' for known modes.
+\end_layout
+
+\begin_layout Subsubsection
+--prefix=<prefix>
+\end_layout
+
+\begin_layout Standard
+Set dump prefix.
+ Default is 
+\begin_inset Quotes eld
+\end_inset
+
+avidump
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+--option=<name>=<value>
+\end_layout
+
+\begin_layout Standard
+Set option <name> to value <value>.
+\end_layout
+
+\begin_layout Subsubsection
+--length=<length>
+\end_layout
+
+\begin_layout Standard
+Set number of frames to dump.
+ Mandatory, unless --overdump-length is specified.
+\end_layout
+
+\begin_layout Subsubsection
+--overdump-length=<length>
+\end_layout
+
+\begin_layout Standard
+Set number of frames to dump after movie end.
+ Mutually exclusive with --length.
+\end_layout
+
+\begin_layout Subsubsection
+--lua=<script>
+\end_layout
+
+\begin_layout Standard
+Run specified lua script (lsnes-dumpavi does not have initialization files).
+\end_layout
+
+\begin_layout Subsubsection
+--load-library=<library>
+\end_layout
+
+\begin_layout Standard
+Load the specified shared object / dynamic library / dynamic link library.
+\end_layout
+
+\begin_layout Subsection
+lsnes settings directory
+\end_layout
+
+\begin_layout Standard
+The lsnes settings directory is (in order of decreasing perference):
+\end_layout
+
+\begin_layout Itemize
+Windows: %APPDATA%
+\backslash
+lsnes (if %APPDATA% exists)
+\end_layout
+
+\begin_layout Itemize
+Unix: $XDG_CONFIG_HOME/lsnes (if $XDG_CONFIG_HOME exists)
+\end_layout
+
+\begin_layout Itemize
+Unix: $HOME/.config/lsnes (if $HOME exists)
+\end_layout
+
+\begin_layout Itemize
+All: .
+ (fallback default).
+\end_layout
+
+\begin_layout Standard
+If leading directories do not exist, attempt to create them is made.
+\end_layout
+
+\begin_layout Section
+Internal commands
+\end_layout
+
+\begin_layout Itemize
+Commands beginning with '*' invoke the corresponding command without alias
+ expansion.
+\end_layout
+
+\begin_layout Itemize
+If command starts with '+' (after possible '*'), the command is executed
+ as-is when button is pressed, and when button is released, it is executed
+ with '+' replaced by '-'.
+\end_layout
+
+\begin_layout Itemize
+Commands without '+' execute only on negative edge (release).
+\end_layout
+
+\begin_layout Subsection
+run-script <script>
+\end_layout
+
+\begin_layout Standard
+Run <script> as if commands were entered on the command line.
+\end_layout
+
+\begin_layout Subsection
+Memory manipulation
+\end_layout
+
+\begin_layout Itemize
+<address> can be one of:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Decimal number
+\end_layout
+
+\begin_layout Itemize
+Hexadecimal number (prefixed with 0x)
+\end_layout
+
+\begin_layout Itemize
+<memarea>+<hexoffset> (no 0x prefix for offset).
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+<value> can be hexadecimal (prefixed with '0x'), unsigned or signed (prefixed
+ with '-') decimal.
+\end_layout
+
+\begin_layout Standard
+The available element <sizes> are:
+\end_layout
+
+\begin_layout Itemize
+byte: 1 byte
+\end_layout
+
+\begin_layout Itemize
+word: 2 bytes
+\end_layout
+
+\begin_layout Itemize
+hword: 3 bytes
+\end_layout
+
+\begin_layout Itemize
+dword: 4 bytes
+\end_layout
+
+\begin_layout Itemize
+qword: 8 bytes
+\end_layout
+
+\begin_layout Itemize
+float: 4 bytes (floating-point)
+\end_layout
+
+\begin_layout Itemize
+double: 8 bytes (floating-point)
+\end_layout
+
+\begin_layout Standard
+When reading RAM and ROM, multi-byte reads/writes are big-endian.
+ When dealing with DSP memory, multi-byte reads/writes are native-endian
+ (do not use operand sizes exceeding DSP bitness, except dword is OK for
+ 24-bit memory).
+\end_layout
+
+\begin_layout Subsubsection
+read-<size> <address>
+\end_layout
+
+\begin_layout Standard
+Read the value of byte in <address>.
+\end_layout
+
+\begin_layout Subsubsection
+read-s<size> <address>
+\end_layout
+
+\begin_layout Standard
+Read the value of signed byte in <address>.
+\end_layout
+
+\begin_layout Subsubsection
+write-<size> <address> <value>
+\end_layout
+
+\begin_layout Standard
+Write <value> to byte in address <address>.
+\end_layout
+
+\begin_layout Subsection
+Main commands
+\end_layout
+
+\begin_layout Standard
+These commands are not available in lsnesrc, but are available after ROM
+ has been loaded.
+\end_layout
+
+\begin_layout Subsubsection
+quit-emulator
+\end_layout
+
+\begin_layout Standard
+Quits the emulator.
+\end_layout
+
+\begin_layout Subsubsection
+pause-emulator
+\end_layout
+
+\begin_layout Standard
+Toggle paused/unpaused
+\end_layout
+
+\begin_layout Subsubsection
++advance-frame 
+\end_layout
+
+\begin_layout Standard
+Advance frame.
+ If the button is still held after configurable timeout expires, game unpauses
+ for the duration frame advance is held.
+\end_layout
+
+\begin_layout Subsubsection
++advance-poll 
+\end_layout
+
+\begin_layout Standard
+Advance subframe.
+ If the button is still held after configurable timeout expires, game unpauses
+ for the duration frame advance is held.
+\end_layout
+
+\begin_layout Subsubsection
+advance-skiplag 
+\end_layout
+
+\begin_layout Standard
+Skip to first poll in frame after current.
+\end_layout
+
+\begin_layout Subsubsection
+reset 
+\end_layout
+
+\begin_layout Standard
+Reset the SNES after this frame.
+\end_layout
+
+\begin_layout Subsubsection
+load <filename> 
+\end_layout
+
+\begin_layout Standard
+Load savestate <filename> in current mode.
+\end_layout
+
+\begin_layout Subsubsection
+load-state <filename> 
+\end_layout
+
+\begin_layout Standard
+Load savestate <filename> in readwrite mode.
+\end_layout
+
+\begin_layout Subsubsection
+load-readonly <filename> 
+\end_layout
+
+\begin_layout Standard
+Load savestate <filename> in readonly mode.
+\end_layout
+
+\begin_layout Subsubsection
+load-preserve <filename> 
+\end_layout
+
+\begin_layout Standard
+Load savestate <filename> in readonly mode, preserving current events.
+\end_layout
+
+\begin_layout Subsubsection
+load-movie <filename> 
+\end_layout
+
+\begin_layout Standard
+Load savestate <filename>, ignoring save part in readonly mode.
+\end_layout
+
+\begin_layout Subsubsection
+save-state <filename> 
+\end_layout
+
+\begin_layout Standard
+Save system state to <filename> as soon as possible.
+\end_layout
+
+\begin_layout Subsubsection
+save-movie <filename> 
+\end_layout
+
+\begin_layout Standard
+Save movie to <filename>.
+\end_layout
+
+\begin_layout Subsubsection
+set-rwmode 
+\end_layout
+
+\begin_layout Standard
+Set recording mode.
+\end_layout
+
+\begin_layout Subsubsection
+set-romode 
+\end_layout
+
+\begin_layout Standard
+Set playback mode
+\end_layout
+
+\begin_layout Subsubsection
+toggle-rwmode 
+\end_layout
+
+\begin_layout Standard
+Toggle between playback and recording modes.
+\end_layout
+
+\begin_layout Subsubsection
+test-1, test-2, test-3
+\end_layout
+
+\begin_layout Standard
+Internal test commands.
+ Don't use.
+\end_layout
+
+\begin_layout Subsubsection
+take-screenshot <filename> 
+\end_layout
+
+\begin_layout Standard
+Save screenshot to <filename>.
+\end_layout
+
+\begin_layout Subsubsection
++controller <class>-<#>-<button>
+\end_layout
+
+\begin_layout Standard
+Press button <button> on controller <num> of class <class>.
+\end_layout
+
+\begin_layout Itemize
+Class 'gamepad': A, B, X, Y, L, R, select, start, up, down, left, right,
+ ext0, ext1, ext2, ext3
+\end_layout
+
+\begin_layout Itemize
+Class 'mouse': L, R
+\end_layout
+
+\begin_layout Itemize
+Class 'superscope': trigger, cursor, turbo, pause
+\end_layout
+
+\begin_layout Itemize
+Class 'justifier': trigger, start
+\end_layout
+
+\begin_layout Itemize
+Class 'gb': A, B, select, start, up, down, left, right
+\end_layout
+
+\begin_layout Subsubsection
+hold-controller <class>-<#>-<button>
+\end_layout
+
+\begin_layout Standard
+Hold/unhold button <button> on controller <num> of class <class>.
+\end_layout
+
+\begin_layout Subsubsection
+type-controller <class>-<#>-<button>
+\end_layout
+
+\begin_layout Standard
+Hold/unhold button <button> on controller <num> of class <class> for the
+ next frame.
+ See +controller for button names.
+\end_layout
+
+\begin_layout Standard
+Cauntion: Does not work properly if outside frame advance.
+\end_layout
+
+\begin_layout Subsubsection
++autofire-controller <class>-<#>-<button> [[<duty>] <cyclelen>]
+\end_layout
+
+\begin_layout Standard
+Start autofire.
+ If duty is not specified, defaults to 1.
+ If <cyclelen> is not specified, defaults to 2.
+\end_layout
+
+\begin_layout Subsubsection
+-autofire-controller <class>-<#>-<button> [[<duty>] <cyclelen>]
+\end_layout
+
+\begin_layout Standard
+End autofire.
+\end_layout
+
+\begin_layout Subsubsection
+autofire-controller <class>-<#>-<button> [[<duty>] <cyclelen>]
+\end_layout
+
+\begin_layout Standard
+Toggle autofire.
+ If autofire is turned on, specified cycle is used.
+\end_layout
+
+\begin_layout Subsubsection
+designate-position <class>-<#>-analog<n>
+\end_layout
+
+\begin_layout Standard
+Designate position for analog pair.
+ <n> is only there if there are multiple axis pairs.
+\end_layout
+
+\begin_layout Subsubsection
+repaint
+\end_layout
+
+\begin_layout Standard
+Force a repaint.
+\end_layout
+
+\begin_layout Subsubsection
+toggle-pause-on-end
+\end_layout
+
+\begin_layout Standard
+Toggle pause on end flag.
+\end_layout
+
+\begin_layout Subsubsection
+set-pause-on-end
+\end_layout
+
+\begin_layout Standard
+Set pause on end flag.
+\end_layout
+
+\begin_layout Subsubsection
+clear-pause-on-end
+\end_layout
+
+\begin_layout Standard
+Clear pause on end flag.
+\end_layout
+
+\begin_layout Subsubsection
+action <action> [<parameters>]
+\end_layout
+
+\begin_layout Standard
+Run specified core action.
+\end_layout
+
+\begin_layout Subsection
+Save jukebox 
+\end_layout
+
+\begin_layout Subsubsection
+cycle-jukebox-backward
+\end_layout
+
+\begin_layout Standard
+Cycle save jukebox backwards.
+\end_layout
+
+\begin_layout Subsubsection
+cycle-jukebox-forward
+\end_layout
+
+\begin_layout Standard
+Cycle save jukebox forwards
+\end_layout
+
+\begin_layout Subsubsection
+set-jukebox-slot <slot>
+\end_layout
+
+\begin_layout Standard
+Set current jukebox slot
+\end_layout
+
+\begin_layout Subsubsection
+load-jukebox
+\end_layout
+
+\begin_layout Standard
+Do load from jukebox (current mode).
+\end_layout
+
+\begin_layout Subsubsection
+save-jukebox
+\end_layout
+
+\begin_layout Standard
+Do state save to jukebox.
+\end_layout
+
+\begin_layout Subsection
+Slot branches
+\end_layout
+
+\begin_layout Subsubsection
+list-branches
+\end_layout
+
+\begin_layout Standard
+List all branches
+\end_layout
+
+\begin_layout Subsubsection
+create-branch <pid> <name>
+\end_layout
+
+\begin_layout Standard
+Create a new branch, with <pid> as parent and <name> as name.
+\end_layout
+
+\begin_layout Subsubsection
+rename-branch <id> <name>
+\end_layout
+
+\begin_layout Standard
+Rename branch <id> to <name>.
+\end_layout
+
+\begin_layout Subsubsection
+reparent-branch <id> <pid>
+\end_layout
+
+\begin_layout Standard
+Set parent of branch <id> to <pid>.
+\end_layout
+
+\begin_layout Subsubsection
+set-branch <id>
+\end_layout
+
+\begin_layout Standard
+Set current branch to <id>.
+\end_layout
+
+\begin_layout Subsubsection
+delete-branch <id>
+\end_layout
+
+\begin_layout Standard
+Delete branch <id>.
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Subsection
+Lua 
+\end_layout
+
+\begin_layout Subsubsection
+evaluate-lua <luacode>
+\end_layout
+
+\begin_layout Standard
+Run Lua code <luacode> using built-in Lua interpretter.
+\end_layout
+
+\begin_layout Subsubsection
+L <luacode>
+\end_layout
+
+\begin_layout Standard
+Synonym for evaluate-lua.
+\end_layout
+
+\begin_layout Subsubsection
+run-lua <script>
+\end_layout
+
+\begin_layout Standard
+Run specified lua file using built-in Lua interpretter.
+\end_layout
+
+\begin_layout Subsubsection
+reset-lua
+\end_layout
+
+\begin_layout Standard
+Clear the Lua VM state and restore to factory defaults.
+\end_layout
+
+\begin_layout Subsection
+Sound 
+\end_layout
+
+\begin_layout Subsubsection
+enable-sound <on/off> 
+\end_layout
+
+\begin_layout Standard
+Enable/Disable sound.
+\end_layout
+
+\begin_layout Subsection
+Misc.
+\end_layout
+
+\begin_layout Subsubsection
+load-rom <file>
+\end_layout
+
+\begin_layout Standard
+Loads ROM (format autodetected) from <file>.
+\end_layout
+
+\begin_layout Subsubsection
+reload-rom
+\end_layout
+
+\begin_layout Standard
+Reloads the main ROM image from.
+\end_layout
+
+\begin_layout Subsubsection
++tangent
+\end_layout
+
+\begin_layout Standard
+Tangent for recording voice for commentary track.
+ While pressed, record a stream.
+\end_layout
+
+\begin_layout Subsubsection
+advance-subframe-timeout
+\end_layout
+
+\begin_layout Standard
+Subframe advance timeout in milliseconds.
+ Default is 100.
+\end_layout
+
+\begin_layout Subsubsection
+set-speed <speed>
+\end_layout
+
+\begin_layout Standard
+Set the speed multiplier.
+ <speed> may be positive number (1 is normal speed) or 
+\begin_inset Quotes eld
+\end_inset
+
+turbo
+\begin_inset Quotes erd
+\end_inset
+
+ for turbo.
+\end_layout
+
+\begin_layout Section
+Settings
+\end_layout
+
+\begin_layout Subsection
+Core settings
+\end_layout
+
+\begin_layout Subsection
+AVI dumper settings
+\end_layout
+
+\begin_layout Subsubsection
+avi-large
+\end_layout
+
+\begin_layout Standard
+AVI dumper: Always dump at 512x448 or 512x478 regardless of what the console
+ outputs.
+\end_layout
+
+\begin_layout Subsubsection
+avi-left-border
+\end_layout
+
+\begin_layout Standard
+AVI dumper: Set the default left border thickness (unless lua overrides)
+ for dumps.
+ Range 0-8191.
+ Default is 0.
+\end_layout
+
+\begin_layout Subsubsection
+avi-right-border
+\end_layout
+
+\begin_layout Standard
+AVI dumper: Set the default right border thickness (unless lua overrides)
+ for dumps.
+ Range 0-8191.
+ Default is 0.
+\end_layout
+
+\begin_layout Subsubsection
+avi-top-border
+\end_layout
+
+\begin_layout Standard
+AVI dumper: Set the default top border thickness (unless lua overrides)
+ for dumps.
+ Range 0-8191.
+ Default is 0.
+\end_layout
+
+\begin_layout Subsubsection
+avi-bottom-border
+\end_layout
+
+\begin_layout Standard
+AVI dumper: Set the default bottom border thickness (unless lua overrides)
+ for dumps.
+ Range 0-8191.
+ Default is 0.
+\end_layout
+
+\begin_layout Subsubsection
+avi-maxframes
+\end_layout
+
+\begin_layout Standard
+AVI dumper: Maximum number of frames per dump segment (0 => unlimited).
+ Range 0-999999999.
+ Default is 0.
+\end_layout
+
+\begin_layout Subsubsection
+avi-compresison
+\end_layout
+
+\begin_layout Standard
+AVI dumper: Compression level (0-18).
+\end_layout
+
+\begin_layout Itemize
+Compression levels 10 and above are not compatible with stock CSCD codec.
+\end_layout
+
+\begin_layout Itemize
+Recomended level is 7.
+\end_layout
+
+\begin_layout Subsubsection
+avi-soundrate
+\end_layout
+
+\begin_layout Standard
+AVI dumper: Set method of determining the sound rate.
+\end_layout
+
+\begin_layout Itemize
+0: Pick nearest of 8, 11.025, 12, 16, 22.05, 24, 32, 44.1, 48, 64, 88.2, 96,
+ 128, 176.4 and 192 kHz.
+\end_layout
+
+\begin_layout Itemize
+1: Round down to nearest integer.
+\end_layout
+
+\begin_layout Itemize
+2: Round up to nearest ingeter.
+\end_layout
+
+\begin_layout Itemize
+3: Multiply by denominator.
+\end_layout
+
+\begin_layout Itemize
+4: High quality 44.1kHz (SRC needed).
+\end_layout
+
+\begin_layout Itemize
+5: High quality 48kHz (SRC needed).
+\end_layout
+
+\begin_layout Subsection
+JMD options
+\end_layout
+
+\begin_layout Subsubsection
+jmd-compression
+\end_layout
+
+\begin_layout Standard
+JMD dumper: Compression level (0-9).
+\end_layout
+
+\begin_layout Section
+Movie editor
+\end_layout
+
+\begin_layout Itemize
+The editor edits in-memory movie.
+\end_layout
+
+\begin_layout Itemize
+Because past can't be edited and readwrite mode doesn't allow future, editing
+ only works in 
+\emph on
+read only
+\emph default
+ mode.
+\end_layout
+
+\begin_layout Itemize
+Keyboard triggers the normal hotkeys and bindings.
+\end_layout
+
+\begin_layout Subsection
+Left button actions
+\end_layout
+
+\begin_layout Itemize
+Clicking on cell in future (indicated by lack of redish background) toggles
+ it (if it is a button) or prompts for a value (if it is an axis)
+\end_layout
+
+\begin_layout Itemize
+Dragging vertically toggles sequence of buttons or changes a sequence of
+ axis values.
+\end_layout
+
+\begin_layout Subsection
+Right button actions
+\end_layout
+
+\begin_layout Standard
+The right mouse button pops up a context-sensitive menu:
+\end_layout
+
+\begin_layout Itemize
+Toggle <something>: Toggle this button
+\end_layout
+
+\begin_layout Itemize
+Change <something>: Change this axis value
+\end_layout
+
+\begin_layout Itemize
+Insert frame after: Insert a frame after this frame
+\end_layout
+
+\begin_layout Itemize
+Append frame: Append a frame to movie
+\end_layout
+
+\begin_layout Itemize
+Append frames: Append specified number of frames to movie
+\end_layout
+
+\begin_layout Itemize
+Delete frame: Delete this frame
+\end_layout
+
+\begin_layout Itemize
+Delete subframe: Delete this subframe
+\end_layout
+
+\begin_layout Itemize
+Truncate movie: Delete this subframe and everything after it.
+\end_layout
+
+\begin_layout Itemize
+Scroll to frame: Prompt for a frame and scroll the display to that frame.
+\end_layout
+
+\begin_layout Itemize
+Scroll to current frame: Scroll the display to current position
+\end_layout
+
+\begin_layout Itemize
+Run to frame: Prompts for frame and runs the emulation to that frame.
+\end_layout
+
+\begin_layout Itemize
+Change number of lines visible: Change the height of the movie display (1
+ to 255).
+\end_layout
+
+\begin_layout Itemize
+Lock scroll to playback: While playing back or rewinding movies, the display
+ will follow if enabled.
+\end_layout
+
+\begin_layout Section
+Memory watch expression syntax
+\end_layout
+
+\begin_layout Standard
+Memory watch expressions has the following syntax elements:
+\end_layout
+
+\begin_layout LyX-Code
+${foo}     The value of memory watch foo.
+\end_layout
+
+\begin_layout LyX-Code
+0x1234     Hexadecimal number 1234
+\end_layout
+
+\begin_layout LyX-Code
+12345      Decimal number 12345
+\end_layout
+
+\begin_layout LyX-Code
+3.141      Decimal number 3.141
+\end_layout
+
+\begin_layout LyX-Code
+-a         Unary negation
+\end_layout
+
+\begin_layout LyX-Code
+~a         Bitwise NOT (integers only)
+\end_layout
+
+\begin_layout LyX-Code
+a*b        Multiplication
+\end_layout
+
+\begin_layout LyX-Code
+a/b        Division/quotent
+\end_layout
+
+\begin_layout LyX-Code
+a%b        Remainder (integers only)
+\end_layout
+
+\begin_layout LyX-Code
+a+b        Sum or string concatenation
+\end_layout
+
+\begin_layout LyX-Code
+a-b        Difference
+\end_layout
+
+\begin_layout LyX-Code
+a<<b       Shift left (integers only)
+\end_layout
+
+\begin_layout LyX-Code
+a>>b       Shift right (integers only).
+ Arithmetic for signed.
+\end_layout
+
+\begin_layout LyX-Code
+a<b        Less than
+\end_layout
+
+\begin_layout LyX-Code
+a<=b       Less or equal to
+\end_layout
+
+\begin_layout LyX-Code
+a==b       Equal to
+\end_layout
+
+\begin_layout LyX-Code
+a!=b       Not equal to
+\end_layout
+
+\begin_layout LyX-Code
+a>=b       Greater or equal to
+\end_layout
+
+\begin_layout LyX-Code
+a>b        Greater than
+\end_layout
+
+\begin_layout LyX-Code
+a&b        Bitwise AND (integers only)
+\end_layout
+
+\begin_layout LyX-Code
+a^b        Bitwise XOR (integers only)
+\end_layout
+
+\begin_layout LyX-Code
+a|b        Bitwise OR (integers only)
+\end_layout
+
+\begin_layout LyX-Code
+a&&b       Logical AND
+\end_layout
+
+\begin_layout LyX-Code
+a||b       Logical OR
+\end_layout
+
+\begin_layout LyX-Code
+π          Numeric constant pi.
+\end_layout
+
+\begin_layout LyX-Code
+i          Imaginary unit
+\end_layout
+
+\begin_layout LyX-Code
+if(x,y)    If x is true, y, else false.
+\end_layout
+
+\begin_layout LyX-Code
+if(x,y,z)  If x is true, y, else z.
+\end_layout
+
+\begin_layout LyX-Code
+select(x...)
+\end_layout
+
+\begin_layout LyX-Code
+           First value in x...
+ that is not false, or false if none.
+\end_layout
+
+\begin_layout LyX-Code
+unsigned(x)
+\end_layout
+
+\begin_layout LyX-Code
+           Cast x to unsigned.
+\end_layout
+
+\begin_layout LyX-Code
+signed(x)
+\end_layout
+
+\begin_layout LyX-Code
+           Cast x to signed.
+\end_layout
+
+\begin_layout LyX-Code
+float(x)
+\end_layout
+
+\begin_layout LyX-Code
+           Cast x to float.
+\end_layout
+
+\begin_layout LyX-Code
+min(x...)  The smallest value among x...
+ or false if empty.
+\end_layout
+
+\begin_layout LyX-Code
+max(x...)  The largest value among x...
+ or false if empty.
+\end_layout
+
+\begin_layout LyX-Code
+sum(x...)  Sum/concatenation of x...
+ or false if empty.
+\end_layout
+
+\begin_layout LyX-Code
+prod(x...) Product of x...
+ or false if empty.
+\end_layout
+
+\begin_layout LyX-Code
+sqrt(x)    Square root of x.
+\end_layout
+
+\begin_layout LyX-Code
+log(x)     Natural log of x.
+\end_layout
+
+\begin_layout LyX-Code
+log(x,y)   Log of y to base x.
+\end_layout
+
+\begin_layout LyX-Code
+exp(x)     e^x.
+\end_layout
+
+\begin_layout LyX-Code
+exp(x,y)   x^y
+\end_layout
+
+\begin_layout LyX-Code
+sin(x)     Sine of x
+\end_layout
+
+\begin_layout LyX-Code
+cos(x)     Cosine of x
+\end_layout
+
+\begin_layout LyX-Code
+tan(x)     Tangent of x
+\end_layout
+
+\begin_layout LyX-Code
+asin(x)    Arcsine of x
+\end_layout
+
+\begin_layout LyX-Code
+acos(x)    Arccosine of x
+\end_layout
+
+\begin_layout LyX-Code
+atan(x)    Arctangent of x
+\end_layout
+
+\begin_layout LyX-Code
+atan(x,y)  Angle between vector (x,y) and x-axis.
+\end_layout
+
+\begin_layout LyX-Code
+sinh(x)    Hyperbolic sine of x
+\end_layout
+
+\begin_layout LyX-Code
+cosh(x)    Hyperbolic cosine of x
+\end_layout
+
+\begin_layout LyX-Code
+tanh(x)    Hyperbolic tangent of x
+\end_layout
+
+\begin_layout LyX-Code
+arsinh(x)  Hyperbolic arsine of x
+\end_layout
+
+\begin_layout LyX-Code
+arcosh(x)  Hyperbolic arcosine of x
+\end_layout
+
+\begin_layout LyX-Code
+artanh(x)  Hyperbolic artangent of x
+\end_layout
+
+\begin_layout LyX-Code
+torad(x)   Convert x degrees to radians.
+\end_layout
+
+\begin_layout LyX-Code
+todeg(x)   Convert x radians to degrees.
+\end_layout
+
+\begin_layout LyX-Code
+re(x)      Real part of complex number x.
+\end_layout
+
+\begin_layout LyX-Code
+im(x)      Imaginary part of complex number x.
+\end_layout
+
+\begin_layout LyX-Code
+conj(x)    Complex conjugate of x.
+\end_layout
+
+\begin_layout LyX-Code
+abs(x)     Absolute value of x.
+\end_layout
+
+\begin_layout LyX-Code
+arg(x)     Argument of x.
+\end_layout
+
+\begin_layout LyX-Code
+pyth(x...) sqrt(sum(x^2)).
+ I.e.
+ pythagorean distance.
+\end_layout
+
+\begin_layout LyX-Code
+e          Base of natural logarithm
+\end_layout
+
+\begin_layout LyX-Code
+pi         Pi
+\end_layout
+
+\begin_layout LyX-Code
+true       Constant true
+\end_layout
+
+\begin_layout LyX-Code
+false      Constant false
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Section
+Modifier and key names:
+\end_layout
+
+\begin_layout Subsection
+wxWidgets platform
+\end_layout
+
+\begin_layout Subsubsection
+Modifier names:
+\end_layout
+
+\begin_layout Standard
+Following modifier names are known:
+\end_layout
+
+\begin_layout Itemize
+alt
+\end_layout
+
+\begin_layout Itemize
+ctrl
+\end_layout
+
+\begin_layout Itemize
+shift 
+\end_layout
+
+\begin_layout Itemize
+meta
+\end_layout
+
+\begin_layout Itemize
+cmd (Mac OS X only)
+\end_layout
+
+\begin_layout Subsubsection
+Key names:
+\end_layout
+
+\begin_layout Standard
+Following key names are known:
+\end_layout
+
+\begin_layout Itemize
+back, tab, return, escape, space, exclaim, quotedbl, hash, dollar, percent,
+ ampersand, quote, leftparen, rightparen, asterisk, plus, comma, minus,
+ period, slash, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, colon, semicolon, less, equals,
+ greater, question, at, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p,
+ q, r, s, t, u, v, w, x, y, z, leftbracket, backslash, rightbracket, caret,
+ underscore, backquote, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p,
+ q, r, s, t, u, v, w, x, y, z, leftcurly, pipe, rightcurly, tilde, delete,
+ start, lbutton, rbutton, cancel, mbutton, clear, shift, alt, control, menu,
+ pause, capital, end, home, lefT, up, right, down, select, print, execute,
+ snapshot, insert, help, numpad0, numpad1, numpad2, numpad3, numpad4, numpad5,
+ numpad6, numpad7, numpad8, numpad9, multiply, add, separator, subtract,
+ decimal, divide, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13,
+ f14, f15, f16, f17, f18, f19, f20, f21, f22, f23, f24, numlock, scroll,
+ pageup, pagedown, numpad_space, numpad_tab, numpad_enter, numpad_f1, numpad_f2,
+ numpad_f3, numpad_f4, numpad_home, numpad_left, numpad_up, numpad_right,
+ numpad_down, numpad_pageup, numpad_pagedown, numpad_end, numpad_begin,
+ numpad_insert, numpad_delete, numpad_equal, numpad_multiply, numpad_add,
+ numpad_separator, numpad_subtract, numpad_decimal, numpad_divide, windows_left,
+ windows_right, windows_menu, command, special1, special2, special3, special4,
+ special5, special6, special7, special8, special9, special10, special11,
+ special12, special13, special14, special15, special16, special17, special18,
+ special19, special20
+\end_layout
+
+\begin_layout Section
+Movie file format
+\end_layout
+
+\begin_layout Standard
+Movie file is .zip archive in itself, normal ZIP archive tools work on it
+ (note: If you recompress it, do not use compression methods other than
+ store and deflate and especially do not use encryption of any kind).
+\end_layout
+
+\begin_layout Subsection
+Detecting clean start/SRAM/Savestate
+\end_layout
+
+\begin_layout Itemize
+If file has member 
+\begin_inset Quotes eld
+\end_inset
+
+savestate
+\begin_inset Quotes erd
+\end_inset
+
+ it is savestate, otherwise:
+\end_layout
+
+\begin_layout Itemize
+If file has members with names starting 
+\begin_inset Quotes eld
+\end_inset
+
+moviesram.
+\begin_inset Quotes erd
+\end_inset
+
+ it is movie starting from SRAM, otherwise:
+\end_layout
+
+\begin_layout Itemize
+It is movie starting from clear state.
+\end_layout
+
+\begin_layout Subsection
+Member: gametype
+\end_layout
+
+\begin_layout Standard
+Type of game ROM and region (as one line).
+ Valid values are:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="8" columns="3">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+System
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Region
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+snes_pal
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Super NES
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PAL
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sgb_pal
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Super Game Boy
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PAL
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+snes_ntsc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Super NES
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NTSC
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sgb_ntsc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Super Game Boy
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NTSC
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+bsx
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+BS-X (non-slotted)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NTSC
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+bsxslotted
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+BS-X (slotted)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NTSC
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sufamiturbo
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sufami Turbo
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NTSC
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Frame rates are:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="2">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Region
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Framerate (fps)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PAL
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+322445/6448
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NTSC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10738636/178683
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Member: port1
+\end_layout
+
+\begin_layout Standard
+Contains type of port #1 (as one line).
+ Valid values are 'none', 'gamepad', 'multitap' and 'mouse'.
+ If not present, defaults to 'gamepad'.
+\end_layout
+
+\begin_layout Subsection
+Member: port2
+\end_layout
+
+\begin_layout Standard
+Contains type of port #2 (as one line).
+ Valid values are 'none', 'gamepad', 'multitap', 'mouse', 'superscope',
+ 'justifier' and 'justifiers'.
+ If not present, defaults to 'none'.
+\end_layout
+
+\begin_layout Subsection
+Member: gamename
+\end_layout
+
+\begin_layout Standard
+Contains name of the game (as one line).
+\end_layout
+
+\begin_layout Subsection
+Member: authors
+\end_layout
+
+\begin_layout Standard
+Contains authors, one per line.
+ Part before '|' is the full name, part after is the nickname.
+\end_layout
+
+\begin_layout Subsection
+Member: systemid
+\end_layout
+
+\begin_layout Standard
+Always 
+\begin_inset Quotes eld
+\end_inset
+
+lsnes-rr1
+\begin_inset Quotes erd
+\end_inset
+
+ (one line).
+ Used to reject other saves.
+\end_layout
+
+\begin_layout Subsection
+Member: controlsversion
+\end_layout
+
+\begin_layout Standard
+Always 
+\begin_inset Quotes eld
+\end_inset
+
+0
+\begin_inset Quotes erd
+\end_inset
+
+ (one line).
+ Used to identify what controls are there.
+\end_layout
+
+\begin_layout Subsection
+Member: 
+\begin_inset Quotes eld
+\end_inset
+
+coreversion
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Contains bsnes core version number (as one line).
+\end_layout
+
+\begin_layout Subsection
+Member: projectid
+\end_layout
+
+\begin_layout Standard
+Contains project ID (as one line).
+ Used to identify if two movies are part of the same project.
+\end_layout
+
+\begin_layout Subsection
+Member: {rom,slota,slotb}{,xml}.sha256
+\end_layout
+
+\begin_layout Standard
+Contains SHA-256 of said ROM or ROM mapping file (as one line).
+ Absent if corresponding file is absent.
+\end_layout
+
+\begin_layout Subsection
+Member: moviesram.<name>
+\end_layout
+
+\begin_layout Standard
+Raw binary startup SRAM of kind <name>.
+ Only present in savestates and movies starting from SRAM.
+\end_layout
+
+\begin_layout Subsection
+Member: saveframe
+\end_layout
+
+\begin_layout Standard
+Contains frame number (as one line) of frame movie was saved on.
+ Only present in savestates.
+\end_layout
+
+\begin_layout Subsection
+Member: lagcounter
+\end_layout
+
+\begin_layout Standard
+Current value of lag counter (as one line).
+ Only present in savestates.
+\end_layout
+
+\begin_layout Subsection
+Member: pollcounters
+\end_layout
+
+\begin_layout Standard
+Contains poll counters (currently 100 of them), one per line.
+ Each line is raw poll count if DRDY is set for it.
+ Otherwise it is negative poll count minus one.
+ Only present in savestates.
+\end_layout
+
+\begin_layout Subsection
+Member: hostmemory
+\end_layout
+
+\begin_layout Standard
+Raw binary dump of host memory.
+ Only present in savestates.
+\end_layout
+
+\begin_layout Subsection
+Member: savestate
+\end_layout
+
+\begin_layout Standard
+The raw binary savestate itself.
+ Savestate detection uses this file, only present in savestates.
+\end_layout
+
+\begin_layout Subsection
+Member: screenshot
+\end_layout
+
+\begin_layout Standard
+Screenshot of current frame.
+ Only present in savestates.
+ First 2 bytes are big-endian width of image, rest are 24-bit RGB image
+ data.
+ Height of image is inferred from the width and size of data.
+\end_layout
+
+\begin_layout Subsection
+Member: sram.<name>
+\end_layout
+
+\begin_layout Standard
+Raw binary SRAM of kind <name> at time of savestate.
+ Only present in savestates.
+\end_layout
+
+\begin_layout Subsection
+Member: input
+\end_layout
+
+\begin_layout Standard
+The actual input track, one line per subframe (blank lines are skipped).
+\end_layout
+
+\begin_layout Itemize
+If the first byte of each line is '.', ' ', <tab> or '|', then the line is
+ part of same frame as previous, otherwise it starts a new frame.
+\end_layout
+
+\begin_layout Itemize
+First subframe must start a new frame.
+\end_layout
+
+\begin_layout Standard
+Length of movie in frames is number of lines in input file that start a
+ new frame.
+\end_layout
+
+\begin_layout Subsection
+Member: subtitles
+\end_layout
+
+\begin_layout Standard
+Subtitle track.
+ Optional.
+\end_layout
+
+\begin_layout Itemize
+Each line is in form <firstframe> <numframes> <text>.
+\end_layout
+
+\begin_layout Itemize
+Linefeed is encoded as 
+\backslash
+n, backslash is encoded as 
+\backslash
+
+\backslash
+.
+\end_layout
+
+\begin_layout Subsection
+Member: rerecords
+\end_layout
+
+\begin_layout Standard
+Contains textual base-10 rerecord count (as one line; emulator just writes
+ this, it doesn't read it) + 1.
+\end_layout
+
+\begin_layout Subsection
+Member: rrdata
+\end_layout
+
+\begin_layout Standard
+This member stores set of load IDs.
+ There is one load ID per rerecord (plus one corresponding to start of project).
+\end_layout
+
+\begin_layout Itemize
+This member constists of concatenation of records
+\end_layout
+
+\begin_layout Itemize
+Each record is 2-36 bytes long and can represent 1-16,843,009 consequtive
+ IDs.
+\end_layout
+
+\begin_layout Itemize
+IDs are interpretted as 256-bit big-endian integers with warparound.
+\end_layout
+
+\begin_layout Itemize
+Initial predicted ID is all zeroes.
+\end_layout
+
+\begin_layout Standard
+Format of each record is:
+\end_layout
+
+\begin_layout Itemize
+1 byte: Opcode byte.
+ Bits 0-4 are prefix length (prefixlen), bits 5-6 are count length (countlen).
+ Bit 7 is unused.
+\end_layout
+
+\begin_layout Itemize
+32-prefixlen bytes of ID.
+\end_layout
+
+\begin_layout Itemize
+countlen bytes of big-endian count (count).
+\end_layout
+
+\begin_layout Standard
+Records are processed as follows:
+\end_layout
+
+\begin_layout Itemize
+To form the first ID encoded by record, take the first prefixlen bytes predicted
+ ID and append the read ID value to it.
+ The result is the first ID encoded.
+\end_layout
+
+\begin_layout Itemize
+If countlen is 0, record encodes 1 ID.
+\end_layout
+
+\begin_layout Itemize
+If countlen is 1, record encodes 2+count IDs.
+\end_layout
+
+\begin_layout Itemize
+If countlen is 2, record encodes 258+count IDs.
+\end_layout
+
+\begin_layout Itemize
+If countlen is 3, record encodes 65794+count IDs.
+\end_layout
+
+\begin_layout Itemize
+The new predicted ID is the next ID after last one encoded by the record.
+\end_layout
+
+\begin_layout Standard
+The number of rerecords + 1 is equal to the sum of number of IDs encoded
+ by all records.
+\end_layout
+
+\begin_layout Subsection
+Member: starttime.second
+\end_layout
+
+\begin_layout Standard
+Movie starting time, second part.
+ Epoch is Unix epoch.
+ Default is 1,000,000,000.
+\end_layout
+
+\begin_layout Subsection
+Member: starttime.subsecond
+\end_layout
+
+\begin_layout Standard
+Movie starting time, subsecond part.
+ Unit is CPU clocks.
+ Default is 0.
+\end_layout
+
+\begin_layout Subsection
+Member: savetime.second
+\end_layout
+
+\begin_layout Standard
+Movie saving time, second part.
+ Default is starttime.second.
+ Only present in savestates.
+\end_layout
+
+\begin_layout Subsection
+Member: savetime.subsecond
+\end_layout
+
+\begin_layout Standard
+Movie saving time, subsecond part.
+ Default is starttime.subsecond.
+ Only present in savestates.
+\end_layout
+
+\begin_layout Section
+lsvs file format (commentary tracks)
+\end_layout
+
+\begin_layout Subsection
+Clusters
+\end_layout
+
+\begin_layout Itemize
+Each cluster is 8kB (8192 bytes) in size.
+\end_layout
+
+\begin_layout Itemize
+Cluster n starts at offset 8192*n in file.
+\end_layout
+
+\begin_layout Itemize
+The following clusters are system special:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Cluster 0 and all clusters with number multiple of 2048 (cluster tables)
+\end_layout
+
+\begin_layout Itemize
+Cluster 1 (superblock)
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Cluster tables
+\end_layout
+
+\begin_layout Itemize
+The cluster table describing cluster n is stored in cluster n & ~0x7FF (zero
+ last 11 bits of n).
+\end_layout
+
+\begin_layout Itemize
+This cluster table consists of 2048 4-byte big-endian integers.
+\end_layout
+
+\begin_layout Itemize
+Each entry describes a cluster in 16MB supercluster, in order.
+\end_layout
+
+\begin_layout Itemize
+The valid values for entries are:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+0x00000000: Free cluster
+\end_layout
+
+\begin_layout Itemize
+0x00000001: Last cluster in chain.
+\end_layout
+
+\begin_layout Itemize
+0xFFFFFFFF: System cluster (cluster tables and superblock)
+\end_layout
+
+\begin_layout Itemize
+(anything else): Number of next cluster in chain.
+ Must not be multiple of 2048.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Due to limitations of the format, there can be at most 2097052 superclusters,
+ giving maximum file size of 16TB.
+\end_layout
+
+\begin_layout Subsection
+Stream table
+\end_layout
+
+\begin_layout Itemize
+The stream table chain always starts in cluster 2.
+\end_layout
+
+\begin_layout Itemize
+Otherwise, it follows normal chaining.
+\end_layout
+
+\begin_layout Itemize
+The stream table consists of 16-byte entries:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The first 8 bytes of entry give big-endian beginning position of stream
+ in units of 1/48000 s.
+\end_layout
+
+\begin_layout Itemize
+The next 4 bytes of entry give big-endian beginning cluster for control
+ data.
+ 0 here marks the entry as not present.
+\end_layout
+
+\begin_layout Itemize
+The last 4 bytes of entry give big-endian beginning cluster for codec data.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Stream table clusters are normal clusters, following normal chaining.
+\end_layout
+
+\begin_layout Itemize
+The stream begnning position is not guarenteed unique.
+ There can be multiple streams with the same starting position in the file.
+\end_layout
+
+\begin_layout Subsection
+Stream control data
+\end_layout
+
+\begin_layout Itemize
+The stream control data consists of entries 4 bytes each:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The first 2 bytes of entry gives big-endian length of packet
+\end_layout
+
+\begin_layout Itemize
+The next byte of entry gives audio length of packet in units of 1/400 s.
+\end_layout
+
+\begin_layout Itemize
+The last byte is control byte.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+0 means this entry is not present and the control data ends.
+\end_layout
+
+\begin_layout Itemize
+1 is valid control entry.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+The stream control data can also end by running into end of the readable
+ chain.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+This happens if there happens to be exact multiple of 2048 packets in stream
+ and number of packets is nonzero.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+These clusters follow normal chaining.
+\end_layout
+
+\begin_layout Subsection
+Stream codec data
+\end_layout
+
+\begin_layout Itemize
+Stream codec data consists of raw Opus data packets packed back to back
+ with nothing in between.
+\end_layout
+
+\begin_layout Itemize
+Warning: Due to internal limitations, this data must reside in the first
+ 65536 superclusters (that is, the first 1TB of the file).
+\end_layout
+
+\begin_layout Subsection
+Superblock
+\end_layout
+
+\begin_layout Itemize
+The superblock is stored in cluster 1.
+ 
+\end_layout
+
+\begin_layout Itemize
+The first 11 bytes are 
+\begin_inset Quotes eld
+\end_inset
+
+sefs-magic
+\begin_inset Quotes erd
+\end_inset
+
+<NUL>.
+\end_layout
+
+\begin_layout Itemize
+The rest are unused.
+\end_layout
+
+\begin_layout Itemize
+This cluster 1 is marked as system special.
+\end_layout
+
+\begin_layout Section
+Known ROM extensions
+\end_layout
+
+\begin_layout Itemize
+SNES cartridge ROMs: sfc, smc, swc, fig, ufo, sf2, gd3, gd7, dx2, mgd, mgh.
+\end_layout
+
+\begin_layout Itemize
+DMG cartridge ROMs: dmg, gb.
+\end_layout
+
+\begin_layout Itemize
+GBC cartridge ROMs: cgb, gbc.
+\end_layout
+
+\begin_layout Section
+Gamepack files
+\end_layout
+
+\begin_layout Itemize
+The first line must be: 
+\begin_inset Quotes eld
+\end_inset
+
+[GAMEPACK FILE]
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+There is one needed line: 
+\begin_inset Quotes eld
+\end_inset
+
+type <systype>
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This sets system type to <systype>.
+ The following system types are valid:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+snes (SNES)
+\end_layout
+
+\begin_layout Itemize
+bsx (BS-X non-slotted)
+\end_layout
+
+\begin_layout Itemize
+bsxslotted (BS-X slotted)
+\end_layout
+
+\begin_layout Itemize
+sufamiturbo (Sufami Turbo)
+\end_layout
+
+\begin_layout Itemize
+sgb (Super Game Boy)
+\end_layout
+
+\begin_layout Itemize
+dmg (Game Boy)
+\end_layout
+
+\begin_layout Itemize
+gbc (Game Boy Color)
+\end_layout
+
+\begin_layout Itemize
+gbc_gba (Game Boy Color with GBA initial register values)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Optionally a region can be specified: 
+\begin_inset Quotes eld
+\end_inset
+
+region <region>
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The following values are valid:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+autodetect (Autodetect region: snes and sgb only)
+\end_layout
+
+\begin_layout Itemize
+ntsc (NTSC: snes, bsx, bsxslotted, sufamiturbo, sgb)
+\end_layout
+
+\begin_layout Itemize
+pal (PAL: snes, sgb)
+\end_layout
+
+\begin_layout Itemize
+world (World: dmg, gbc, gbc_gba)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+ROM images are loaded as: 
+\begin_inset Quotes eld
+\end_inset
+
+rom <type> <file>
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The following types are valid:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+rom (Cartridge ROM in snes, dmg, gbc, gbc_gba.
+ BIOS in bsx, bsxslotted, sufamiturbo)
+\end_layout
+
+\begin_layout Itemize
+bsx (Cartridge ROM in bsx, bsxslotted)
+\end_layout
+
+\begin_layout Itemize
+slot-a (Cartridge ROM in sufamiturbo)
+\end_layout
+
+\begin_layout Itemize
+slot-b (Cartridge ROM in sufamiturbo)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+ROM markup can be loaded as: 
+\begin_inset Quotes eld
+\end_inset
+
+xml <type> <file>
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The types valid are the same as for ROMs.
+\end_layout
+
+\begin_layout Itemize
+Patches can be loaded as 
+\begin_inset Quotes eld
+\end_inset
+
+patch[<offset>] <type> <file>
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The types are the same as for ROMs.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Offset is given in form [+-]<number>.
+ Usually offset is either +0 or -512.
+\end_layout
+
+\begin_layout Itemize
+Default offset is +0.
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Example:
+\end_layout
+
+\begin_layout LyX-Code
+[GAMEPACK FILE]
+\end_layout
+
+\begin_layout LyX-Code
+type snes
+\end_layout
+
+\begin_layout LyX-Code
+rom rom speedygonzales.sfc
+\end_layout
+
+\begin_layout LyX-Code
+patch-512 rom sonicthehedgehog.ips
+\end_layout
+
+\begin_layout Subsection
+Example 2:
+\end_layout
+
+\begin_layout LyX-Code
+[GAMEPACK FILE]
+\end_layout
+
+\begin_layout LyX-Code
+type sgb
+\end_layout
+
+\begin_layout LyX-Code
+rom rom supergameboy.sfc
+\end_layout
+
+\begin_layout LyX-Code
+rom dmg megamanV.dmg
+\end_layout
+
+\begin_layout Section
+Quick'n'dirty encode guide
+\end_layout
+
+\begin_layout Enumerate
+Start the emulator and load the ROM and movie file.
+\end_layout
+
+\begin_layout Enumerate
+Set large AVI option 'set-setting avi-large on'
+\end_layout
+
+\begin_layout Enumerate
+Enable dumping 'dump-avi tmpdump' 
+\end_layout
+
+\begin_layout Enumerate
+Unpause and let it run until you want to end dumping.
+\end_layout
+
+\begin_layout Enumerate
+Close the emulator (closing the window is the easiest way).
+ Or use 'end-avi'.
+\end_layout
+
+\begin_layout Enumerate
+For each tmpdump*.avi file created, on command prompt, do 'x264 --crf 10
+ -o tmpdump_<numbers>.mkv tmpdump_<numbers>.avi'.
+\end_layout
+
+\begin_layout Enumerate
+Do 'sox tmpdump.sox tmpdump.ogg rate -v 32000'
+\end_layout
+
+\begin_layout Enumerate
+Do 'mkvmerge -o tmpdump_video.mkv tmpdump_0000000.mkv + tmpdump_0000001.mkv
+ + tmpdump_0000002.mkv' (list every tmpdump_<numbers>.mkv, with + in between).
+\end_layout
+
+\begin_layout Enumerate
+Do 'mkvmerge -o final.mkv tmpdump_video.mkv tmpdump.ogg'.
+ Now final.mkv contains quick'n'dirty encode.
+\end_layout
+
+\begin_layout Section
+Axis configurations for some gamepad types:
+\end_layout
+
+\begin_layout Subsection
+XBox360 controller:
+\end_layout
+
+\begin_layout Standard
+Axes 2 and 5 (joystick<n>axis2 and joystick<n>axis5) should be set to pressure-+.
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis2 pressure-+
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis5 pressure-+
+\end_layout
+
+\begin_layout Itemize
+This is needed for SDL only.
+ EVDEV sets those types correctly.
+\end_layout
+
+\begin_layout Subsection
+PS3 
+\begin_inset Quotes eld
+\end_inset
+
+sixaxis
+\begin_inset Quotes erd
+\end_inset
+
+ controller:
+\end_layout
+
+\begin_layout Standard
+Axes 8-19 should be disabled.
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis8 disabled
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis9 disabled
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis10 disabled
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis11 disabled
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis12 disabled
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis13 disabled
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis14 disabled
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis15 disabled
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis16 disabled
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis17 disabled
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis18 disabled
+\end_layout
+
+\begin_layout LyX-Code
+set-axis joystick0axis19 disabled
+\end_layout
+
+\begin_layout Section
+Errata:
+\end_layout
+
+\begin_layout Subsection
+Problems from BSNES core:
+\end_layout
+
+\begin_layout Itemize
+The whole pending save stuff.
+\end_layout
+
+\begin_layout Itemize
+It is slow (especially accuracy).
+\end_layout
+
+\begin_layout Itemize
+Firmwares can't be loaded from ZIP archives.
+\end_layout
+
+\begin_layout Subsection
+Other problems:
+\end_layout
+
+\begin_layout Itemize
+Modifiers don't work with pseudo-keys.
+\end_layout
+
+\begin_layout Itemize
+Audio for last dumped frame is not itself dumped.
+\end_layout
+
+\begin_layout Itemize
+Audio in UI is pretty bad in quality if game doesn't run at full speed.
+\end_layout
+
+\end_body
+\end_document

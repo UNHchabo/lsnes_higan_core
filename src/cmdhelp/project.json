@@ -1,0 +1,27 @@
+{
+	"__mod":"CPROJECT",
+	"list-branches":[
+		"bls", "List all slot branches",
+		{"":"List all slot branches."}
+	],
+	"create-branch":[
+		"bmk", "Create a new slot branch",
+		{"<parentid> <name>":"Create new branch named <name> under <parentid>."}
+	],
+	"delete-branch":[
+		"brm", "Delete a slot branch",
+		{"<id>":"Delete slot branch with id <id>."}
+	],
+	"set-branch":[
+		"bset", "Set current slot branch",
+		{"<id>":"Set current branch to <id>."}
+	],
+	"reparent-branch":[
+		"brp", "Reparent a slot branch",
+		{"<id> <newpid>":"Reparent branch <id> to be child of <newpid>."}
+	],
+	"rename-branch":[
+		"bmv", "Rename a slot branch",
+		{"<id> <name>":"Rename branch <id> to <name>."}
+	]
+}

@@ -1,0 +1,154 @@
+#
+# Host system:
+#	- The system lsnes is being built on.
+# Target system:
+#	- The system the built lsnes will run on.
+#	- If not crosscompiling, this is the same as host system.
+#
+
+
+# Apply the following prefix for commands when building things that target the target system.
+# If not crosscompiling, leave blank.
+CROSS_PREFIX=
+
+# Postfix (without the leading dot) for object files.
+# Usually 'o'.
+OBJECT_SUFFIX=o
+
+# Postfix (without the leading dot) for archive files.
+# Usually 'a'.
+ARCHIVE_SUFFIX=a
+
+# Postfix (including possible '.') for executable files.
+# Usually blank for unix-type systems (including Linux and Mac OS X), '.exe' for Windows.
+DOT_EXECUTABLE_SUFFIX=
+
+# C++ compiler (GCC 4.7 or newer) for the target system.
+# CROSS_PREFIX is prepended to this command.
+CC=g++
+
+# Linker for the target system.
+# CROSS_PREFIX is prepended to this command.
+LD=ld
+
+# Ranlib for target system.
+# CROSS_PREFIX is prepended to this command.
+RANLIB=ranlib
+
+# Host system C++ compiler.
+# If not crosscompiling, build host system and target system are one and the same.
+# $(CC) means the same compiler as main C++ compiler to use (but without prefix). Otherwise, set to host C++ compiler.
+HOSTCC=$(CC)
+
+# Host C++ compiler/linker flags.
+USER_HOSTCCFLAGS=
+
+# C++ complier extra flags.
+USER_CFLAGS=-g
+
+# Linker extra flags.
+USER_LDFLAGS=
+
+# C++ compiler extra flags for platform code.
+USER_PLATFORM_CFLAGS=
+
+# Linker extra flags for platform code.
+USER_PLATFORM_LDFLAGS=
+
+# The name of font file to use.
+# Currently supported:
+# - cp437.hex: Standard VGA font (256 characters).
+# - unifontfull-5.1.20080820.hex: GNU unifont (covers most of Unicode BMP)
+FONT_SRC=unifontfull-5.1.20080820.hex
+
+# Lua package to use.
+# - Usually either 'lua' or 'lua5.2'.
+# - Default value is 'lua'.
+LUA=lua
+
+# Regex package to use.
+# Currently supported:
+# - NATIVE: std::thread
+# - BOOST: boost_thread
+REGEX=NATIVE
+
+# Threading package to use.
+# Currently supported:
+# - NATIVE: std::thread
+# - BOOST: boost_thread
+THREADS=NATIVE
+
+# Graphics library to use.
+# Currently supported:
+# - WXWIDGETS: wxWidgets
+GRAPHICS=WXWIDGETS
+
+# Sound library to use.
+# Currently supported:
+# - DUMMY: No sound.
+# - PORTAUDIO: Portaudio.
+# - LIBAO: Libao.
+SOUND=PORTAUDIO
+
+# Joystick library to use.
+# Currently supported:
+# - DUMMY: No joystick.
+# - EVDEV: EVDEV (Linux only)
+# - WIN32MM: Windows Multimedia (Win32 only).
+# - WXWIDGETS: wxWidgets (GRAPHICS=WXWIDGETS only)
+# - MACOSX: Mac OS X (Mac OS X only).
+JOYSTICK=DUMMY
+
+# Set to non-empty value (e.g. 'yes') to enable use of Secret Rabbit Code (a.k.a. libsamperate).
+# This is used for high-quality samplerate conversion for dumping.
+SECRET_RABBIT_CODE=
+
+# Set to non-empty value (e.g. 'yes') to build the gambatte core.
+BUILD_GAMBATTE=
+
+# Set to non-empty value (e.g. 'yes') to build the bsnes core.
+BUILD_BSNES=yes
+
+# Set to non-empty value (e.g. 'yes') if bsnes build uses compatiblity core, not accuracy core.
+BSNES_IS_COMPAT=yes
+
+# Set to non-empty value (e.g. 'yes') if boost libraries need the '-mt' prefix.
+# Useful on Win32 and Mac OS X.
+BOOST_NEEDS_MT=
+
+# Set to non-empty value (e.g. 'yes') if host boost libraries need the '-mt' prefix.
+# Useful when building on Mac OS X.
+HOST_BOOST_NEEDS_MT=
+
+# Set to non-empty value (e.g. 'yes') if the linker exports symbols without -rdynamic.
+# Useful on Mac OS X.
+NO_RDYNAMIC=
+
+# Set to non-empty vlaue (e.g. 'yes') to disable use of DLFCN.
+NO_DLFCN=
+
+# Set to non-empty value (e.g. 'yes') to use boost::filesystem3 instead of boost::filesystem.
+BOOST_FILESYSTEM3=
+
+# Set to non-empty value (e.g. 'yes') to enable commentary track support (requires Opus codec).
+OPUS_CODEC=
+
+# Set to non-empty value (e.g. 'yes') to use Opus codec surround encoding support.
+OPUS_CODEC_SUPPORTS_SURROUND=
+
+# Set to non-empty value (e.g. 'yes') to use libgcrypt for SHA-256 instead of builtin routines.
+USE_LIBGCRYPT=yes
+
+# Postfix for boost for host builds.
+HOST_BOOST_POSTFIX=
+
+# Set to non-empty value (e.g. 'yes') to support LZMA/XZ compression via liblzma (the XZ version).
+USE_LIBLZMA=
+
+# Set to non-empty value (e.g. 'yes') if iconv(3) needs libiconv.
+NEED_LIBICONV=
+
+# The target architecture
+# I386 - I386/AMD64
+# Leave empty for generic/autodetect.
+ARCHITECTURE=

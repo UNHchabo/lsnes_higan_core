@@ -1,0 +1,182 @@
+{
+	"__mod":"CLOADSAVE",
+	"load":[
+		"ld", "Load savestate (current mode)",
+		{"<file>":"Load state from <file> in current mode"},
+		{
+			"$SLOT:1":"Load‣Slot 1",
+			"$SLOT:2":"Load‣Slot 2",
+			"$SLOT:3":"Load‣Slot 3",
+			"$SLOT:4":"Load‣Slot 4",
+			"$SLOT:5":"Load‣Slot 5",
+			"$SLOT:6":"Load‣Slot 6",
+			"$SLOT:7":"Load‣Slot 7",
+			"$SLOT:8":"Load‣Slot 8",
+			"$SLOT:9":"Load‣Slot 9",
+			"$SLOT:10":"Load‣Slot 10",
+			"$SLOT:11":"Load‣Slot 11",
+			"$SLOT:12":"Load‣Slot 12",
+			"$SLOT:13":"Load‣Slot 13",
+			"$SLOT:14":"Load‣Slot 14",
+			"$SLOT:15":"Load‣Slot 15",
+			"$SLOT:16":"Load‣Slot 16",
+			"$SLOT:17":"Load‣Slot 17",
+			"$SLOT:18":"Load‣Slot 18",
+			"$SLOT:19":"Load‣Slot 19",
+			"$SLOT:20":"Load‣Slot 20",
+			"$SLOT:21":"Load‣Slot 21",
+			"$SLOT:22":"Load‣Slot 22",
+			"$SLOT:23":"Load‣Slot 23",
+			"$SLOT:24":"Load‣Slot 24",
+			"$SLOT:25":"Load‣Slot 25",
+			"$SLOT:26":"Load‣Slot 26",
+			"$SLOT:27":"Load‣Slot 27",
+			"$SLOT:28":"Load‣Slot 28",
+			"$SLOT:29":"Load‣Slot 29",
+			"$SLOT:30":"Load‣Slot 30",
+			"$SLOT:31":"Load‣Slot 31",
+			"$SLOT:32":"Load‣Slot 32"
+		}
+	],
+	"save-state":[
+		"sa", "Save state",
+		{"<file>":"Save state to <file>"},
+		{
+			"$SLOT:1":"Save‣Slot 1",
+			"$SLOT:2":"Save‣Slot 2",
+			"$SLOT:3":"Save‣Slot 3",
+			"$SLOT:4":"Save‣Slot 4",
+			"$SLOT:5":"Save‣Slot 5",
+			"$SLOT:6":"Save‣Slot 6",
+			"$SLOT:7":"Save‣Slot 7",
+			"$SLOT:8":"Save‣Slot 8",
+			"$SLOT:9":"Save‣Slot 9",
+			"$SLOT:10":"Save‣Slot 10",
+			"$SLOT:11":"Save‣Slot 11",
+			"$SLOT:12":"Save‣Slot 12",
+			"$SLOT:13":"Save‣Slot 13",
+			"$SLOT:14":"Save‣Slot 14",
+			"$SLOT:15":"Save‣Slot 15",
+			"$SLOT:16":"Save‣Slot 16",
+			"$SLOT:17":"Save‣Slot 17",
+			"$SLOT:18":"Save‣Slot 18",
+			"$SLOT:19":"Save‣Slot 19",
+			"$SLOT:20":"Save‣Slot 20",
+			"$SLOT:21":"Save‣Slot 21",
+			"$SLOT:22":"Save‣Slot 22",
+			"$SLOT:23":"Save‣Slot 23",
+			"$SLOT:24":"Save‣Slot 24",
+			"$SLOT:25":"Save‣Slot 25",
+			"$SLOT:26":"Save‣Slot 26",
+			"$SLOT:27":"Save‣Slot 27",
+			"$SLOT:28":"Save‣Slot 28",
+			"$SLOT:29":"Save‣Slot 29",
+			"$SLOT:30":"Save‣Slot 30",
+			"$SLOT:31":"Save‣Slot 31",
+			"$SLOT:32":"Save‣Slot 32"
+		}
+	],
+	"load-jukebox":[
+		"ldj", "Load selected slot",
+		{"":"Load selected slot"},
+		{"":"Load‣Selected slot"}
+	],
+	"load-jukebox-readwrite":[
+		"ldjrw", "Load selected slot in recording mode",
+		{"":"Load selected slot in recording mode"},
+		{"":"Load‣Selected slot (recording mode)"}
+	],
+	"load-jukebox-readonly":[
+		"ldjro", "Load current slot in playback mode",
+		{"":"Load current slot in playback mode"},
+		{"":"Load‣Selected slot (playback mode)"}
+	],
+	"load-jukebox-preserve":[
+		"ldjp", "Load current slot, preserving input",
+		{"":"Load current slot, preserving input"},
+		{"":"Load‣Selected slot (preserve input)"}
+	],
+	"load-jukebox-movie":[
+		"ldjm", "Load current slot as movie",
+		{"":"Load current slot as movie"},
+		{"":"Load‣Selected slot (as movie)"}
+	],
+	"save-jukebox":[
+		"saj", "Save current slot",
+		{"":"Save current slot"},
+		{"":"Save‣Selected slot"}
+	],
+	"load-smart":[
+		"ldsm", "Load savestate (heuristic mode)",
+		{"<file>":"Load state from <file> in heuristic mode"}
+	],
+	"load-state":[
+		"ldrw", "Load savestate (R/W)",
+		{"<file>":"Load state from <file> in Read/Write mode"}
+	],
+	"load-readonly":[
+		"ldro", "Load savestate (RO)",
+		{"<file>":"Load state from <file> in playback mode"}
+	],
+	"load-preserve":[
+		"ldp", "Load savestate (preserve input)",
+		{"<file>":"Load state from <file> preserving input"}
+	],
+	"load-movie":[
+		"ldm", "Load movie",
+		{"<file>":"Load movie from <file>"}
+	],
+	"load-allbranches":[
+		"ldab", "Load savestate (all branches)",
+		{"<file>":"Load state from <file> with all branches"}
+	],
+	"save-state-binary":[
+		"sasb",  "Save state (binary)",
+		{"<file>":"Save state to <file> in binary format"}
+	],
+	"save-state-zip":[
+		"sasz", "Save state (zip)",
+		{"<file>":"Save state to <file> in zip format"}
+	],
+	"save-movie":[
+		"sam", "Save movie",
+		{"<file>":"Save movie to <file>"}
+	],
+	"save-movie-binary":[
+		"samb", "Save movie (binary)",
+		{"<file>":"Save movie to <file> in binary format"}
+	],
+	"save-movie-zip":[
+		"samz", "Save movie (zip)",
+		{"<file>":"Save movie to <file> in zip format"}
+	],
+	"rewind-movie":[
+		"rewind", "Rewind movie to the beginning",
+		{"":"Rewind movie to the beginning"},
+		{"":"Movie‣Rewind movie"}
+	],
+	"cancel-saves":[
+		"cancel", "Cancel all pending saves",
+		{"":"Cancel pending saves"},
+		{"":"Save‣Cancel pending saves"}
+	],
+	"flush-slotinfo":[
+		"flushslots", "Flush slotinfo cache",
+		{"":"Flush slotinfo cache"},
+		{"":"Save‣Flush slotinfo cache"}
+	],
+	"load-rom":[
+		"lrom", "Load specified ROM",
+		{"<file>":"Load <file> as packfile"}
+	],
+	"reload-rom":[
+		"rlrom", "Reload the current ROM",
+		{"":"Reload the currently loaded ROM from disk"},
+		{"":"Movie‣Reload the current ROM"}
+	],
+	"close-rom":[
+		"clrom", "Close the current ROM",
+		{"":"Close the currentloy loaded ROM and return to null core"},
+		{"":"Movie‣Close current ROM"}
+	]
+}

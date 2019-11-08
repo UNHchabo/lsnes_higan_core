@@ -1,0 +1,131 @@
+00000	Byte		Demo mode:
+			0 => Player control.
+			1 => Recorded demo.
+			2 => DEMO.REC demo.
+00001	65535		Buffer containing demo data.
+10000	Word		Length
+10002	Word		Gravity
+10004	Word		Amount of Oxygen
+10006	Word		Amount of Fuel
+10008	72xDword	Palette (65536 * r + 256 * g + b)
+			0 => Unused.
+			1-15 => Floor top colors
+			16-30 => Floor front colors
+			31-45 => Floor right edge colors
+			46-60 => Floor left edge colors
+			61 => Block top color 0.
+			62 => Block front.
+			63 => Block right
+			64 => Block left.
+			65 => Block inside (tunnel)
+			66 => Pipe front.
+			67 => Pipe inside.
+			68 => Pipe right 1
+			69 => Pipe left 1 / right 2
+			70 => Pipe left 2 / right 3
+			71 => Pipe left 3
+10128	32620xWord	Level tile data.
+			Bits 0-3: Lower floor type (0 => No lower floor)
+			Bits 4-7: Upper floor type (only meaningful if block type 2-5)
+			Bits 8-11: Block type
+			0000 => No block
+			0001 => Pipe
+			0010 => Short block
+			0011 => Short block with tunnel.
+			0100 => Tall block
+			0101 => Tall block with tunnel.
+20000	qword		Number of subsamples left in current sound.
+20008	dword		Sound data pointer.
+2000C	dword		Current subsample in sound.
+20010	dword		(Unused)
+20014	word		(unused)
+20016	byte		Current byte from sound data.
+20017	byte		Rate constant (256 - 1MHz / sampling_rate)
+20018	32xByte		RNG state
+20038	dword		Frame counter
+2003C	dword		Death frame number.
+20040	dword		Longitudial position.
+20044	dword		Projected longitudial position.
+20048	dword		Longitudial speed.
+2004C	dword		Longitudial speed bias.
+20050	word		Frame in explosion (0 => Not exploded).
+20052	word		Number of frames post death.
+20054	word		Acceleration of gravity (negative).
+20056	word		Horizontal position.
+20058	word		Vertical position.
+2005A	word		Horizontal projected position.
+2005C	word		Vertical projected position.
+2005E	word		Horizontal speed.
+20060	word		Vertical speed.
+20062	word		Drift speed.
+20064	word		Jump ground level.
+20066	word		Amount of no support.
+20068	word		Balance of no support.
+2006A	word		Fuel left.
+2006C	word		O2 left.
+2006E	word		Gravity.
+20070	word		O2 use per frame.
+20072	word		Fuel use factor.
+20074	word		Minimum speed for bounce.
+20076	word		Level amount of O2.
+20078	word		Level amount of fuel.
+2007A	byte		Cause of death:
+			0 => Still alive.
+			1 => Burned by floor
+			2 => Fell into pit
+			3 => Ran out of fuel
+			4 => Ran out of oxygen.
+			5 => Collided with wall.
+			6 => Escaped the level.
+			255 => Finished the level.
+2007B	byte		Flags:
+			Bit 0: In locked jump.
+			Bit 1: Tried to lock this jump.
+			Bit 2: In jump.
+			Bit 3: Landed on floor.
+			Bit 4: Slippery floor in effect.
+			Bit 5: Sticky floor in effect.
+			Bit 6: On blank tile.
+			Bit 7: Level disables jumping.
+2007C	dword		(unused)
+20080	qword		Position in background music (samples)
+20088	qword		Total frames ran.
+20090	dowrd		Current background song number.
+20094	word		In menu: Amount of frames waited.
+			In level: Timeattack frame count.
+20096	byte		Paused flag.
+20097	byte		Indicated speed.
+20098	byte		Indicated O2
+20099	byte		Indicated fuel.
+2009A	byte		Indicated distance
+2009B	byte		Lock indicator flag.
+2009C	byte		Out of O2/Fuel flash phase.
+2009D	byte		State of game.
+			0 => Menu fading in
+			1 => In menu
+			2 => Menu fading out
+			3 => Loading level
+			4 => Level fading in
+			5 => Playing level
+			6 => Level complete
+			7 => Level fading out (going to menu)
+			8 => Loading menu
+			9 => Level unavailable
+			10 => Demo unavailable
+			11 => Level fading out (going to retry)
+			12 => Loading level (without reloading music)
+			13 => Lockup
+2009E	byte		Fade counter.
+2009F	byte		Current stage number (0-30)
+200A0	byte		Menu old stage number
+200A1	byte		Menu saved stage number.
+200A2	byte		Demo flag.
+			0 => Loaded level will have player control.
+			1 => Run level demo.
+			2 => Run DEMO.REC.
+200A3	byte		Last frame pressed keys.
+200A4	byte		Secret flag (bit 7 if active, bits 0-6 give level id).
+200A5	byte		Time attack flag.
+200A6	word		(unused)
+200A8	32*byte		Number of times each level has been completed (SRAM).
+200C8

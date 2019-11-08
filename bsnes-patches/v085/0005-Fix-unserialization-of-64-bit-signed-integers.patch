@@ -1,0 +1,25 @@
+From cdf2f46490f128308eb7f399d03530936ebeda0a Mon Sep 17 00:00:00 2001
+From: Ilari Liusvaara <ilari.liusvaara@elisanet.fi>
+Date: Fri, 11 Nov 2011 03:05:48 +0200
+Subject: [PATCH 05/27] Fix unserialization of 64-bit signed integers
+
+---
+ nall/serializer.hpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/nall/serializer.hpp b/nall/serializer.hpp
+index ff2337ab..e6bc8fad 100755
+--- a/nall/serializer.hpp
++++ b/nall/serializer.hpp
+@@ -58,7 +58,7 @@ namespace nall {
+         for(unsigned n = 0; n < size; n++) idata[isize++] = value >> (n << 3);
+       } else if(imode == Load) {
+         value = 0;
+-        for(unsigned n = 0; n < size; n++) value |= idata[isize++] << (n << 3);
++        for(unsigned n = 0; n < size; n++) value |= (unsigned long long)idata[isize++] << (n << 3);
+       } else if(imode == Size) {
+         isize += size;
+       }
+-- 
+2.15.0.rc1
+

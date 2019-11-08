@@ -1,0 +1,17 @@
+{
+	"__mod":"CMHOLD",
+	"+hold-macro":[
+		"p", "Hold all macro enable (hold)",
+		{"":"Hold macros enable"},
+		{"":"Macro‣Hold all macros"}
+	],
+	"-hold-macro":[
+		"r", "Hold all macro disable (hold)",
+		{"":"Hold macros disable"}
+	],
+	"hold-macro":[
+		"t", "Hold all macros for one frame",
+		{"":"Hold macros typed"},
+		{"":"Macro‣Hold all macros for one frame"}
+	]
+}

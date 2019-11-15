@@ -11,8 +11,6 @@ rom
 lsnes
 *.util
 /core
-/bsnes
-/gambatte
 src/fonts/font.cpp
 src/core/version.cpp
 src/cmdhelp/*.cpp

@@ -21,7 +21,7 @@ ARCHIVE_SUFFIX=a
 
 # Postfix (including possible '.') for executable files.
 # Usually blank for unix-type systems (including Linux and Mac OS X), '.exe' for Windows.
-DOT_EXECUTABLE_SUFFIX=
+DOT_EXECUTABLE_SUFFIX=.exe
 
 # C++ compiler (GCC 4.7 or newer) for the target system.
 # CROSS_PREFIX is prepended to this command.
@@ -44,10 +44,10 @@ HOSTCC=$(CC)
 USER_HOSTCCFLAGS=
 
 # C++ complier extra flags.
-USER_CFLAGS=-g
+USER_CFLAGS=-g -msse -O2 -DBOOST_THREAD_USE_LIB -mthreads -D__MSVCRT_VERSION__=0x0601
 
 # Linker extra flags.
-USER_LDFLAGS=
+USER_LDFLAGS=-liconv -lgdi32
 
 # C++ compiler extra flags for platform code.
 USER_PLATFORM_CFLAGS=
@@ -64,7 +64,7 @@ FONT_SRC=unifontfull-5.1.20080820.hex
 # Lua package to use.
 # - Usually either 'lua' or 'lua5.2'.
 # - Default value is 'lua'.
-LUA=lua
+LUA=lua5.2
 
 # Regex package to use.
 # Currently supported:
@@ -76,7 +76,7 @@ REGEX=NATIVE
 # Currently supported:
 # - NATIVE: std::thread
 # - BOOST: boost_thread
-THREADS=NATIVE
+THREADS=BOOST
 
 # Graphics library to use.
 # Currently supported:
@@ -97,11 +97,11 @@ SOUND=PORTAUDIO
 # - WIN32MM: Windows Multimedia (Win32 only).
 # - WXWIDGETS: wxWidgets (GRAPHICS=WXWIDGETS only)
 # - MACOSX: Mac OS X (Mac OS X only).
-JOYSTICK=DUMMY
+JOYSTICK=WIN32MM
 
 # Set to non-empty value (e.g. 'yes') to enable use of Secret Rabbit Code (a.k.a. libsamperate).
 # This is used for high-quality samplerate conversion for dumping.
-SECRET_RABBIT_CODE=
+SECRET_RABBIT_CODE=yes
 
 # Set to non-empty value (e.g. 'yes') to build the gambatte core.
 BUILD_GAMBATTE=
@@ -114,11 +114,11 @@ BSNES_IS_COMPAT=yes
 
 # Set to non-empty value (e.g. 'yes') if boost libraries need the '-mt' prefix.
 # Useful on Win32 and Mac OS X.
-BOOST_NEEDS_MT=
+BOOST_NEEDS_MT=yes
 
 # Set to non-empty value (e.g. 'yes') if host boost libraries need the '-mt' prefix.
 # Useful when building on Mac OS X.
-HOST_BOOST_NEEDS_MT=
+HOST_BOOST_NEEDS_MT=yes
 
 # Set to non-empty value (e.g. 'yes') if the linker exports symbols without -rdynamic.
 # Useful on Mac OS X.
@@ -146,7 +146,7 @@ HOST_BOOST_POSTFIX=
 USE_LIBLZMA=
 
 # Set to non-empty value (e.g. 'yes') if iconv(3) needs libiconv.
-NEED_LIBICONV=
+NEED_LIBICONV=yes
 
 # The target architecture
 # I386 - I386/AMD64
